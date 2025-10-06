@@ -66,8 +66,9 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
-  const [currentCategory, setCurrentCategory] = useState('dsa');
+  const [currentCategory, setCurrentCategory] = useState('Data Structures & Algorithms');
   const [selectedLanguage, setSelectedLanguage] = useState(null);
+  const [selectedDsaSubcat, setSelectedDsaSubcat] = useState('latest_uploads');
 
   // Fetch videos from API
   const fetchVideos = async (category, subcategory = null) => {
@@ -98,8 +99,25 @@ function App() {
 
   // Load initial videos
   useEffect(() => {
-    fetchVideos('dsa');
+    // Ensure initial view is DSA latest uploads and the toolbar is visible
+    fetchVideos('dsa', 'latest_uploads');
+    setSelectedDsaSubcat('latest_uploads');
   }, []);
+
+  // DSA subcategories configuration (new 11 only)
+  const dsaSubcategories = [
+    { label: 'Most Watched', key: 'most_watched' },
+    { label: 'Latest Uploads', key: 'latest_uploads' },
+    { label: 'Quick Concepts (Under 20 mins)', key: 'quick_concepts' },
+    { label: 'Masterclasses', key: 'masterclasses' },
+    { label: 'Arrays & Strings', key: 'arrays_strings' },
+    { label: 'Linked Lists', key: 'linked_lists' },
+    { label: 'Searching & Sorting', key: 'searching_sorting' },
+    { label: 'Trees & Graphs', key: 'trees_graphs' },
+    { label: 'Heaps & Tries', key: 'heaps_tries' },
+    { label: 'Dynamic Programming', key: 'dynamic_programming' },
+    { label: 'Backtracking', key: 'backtracking' }
+  ];
 
   // LanguageHub Component
   const LanguageHub = () => (
@@ -152,6 +170,9 @@ function App() {
     
     setCurrentCategory(categoryName);
     setSelectedLanguage(null);
+    if (categoryName === 'Data Structures & Algorithms') {
+      setSelectedDsaSubcat('latest_uploads');
+    }
     
     if (['Data Structures & Algorithms', 'System Design', 'Behavioral Questions'].includes(categoryName)) {
       const categoryMap = {
@@ -322,6 +343,25 @@ function App() {
                   {categories.find(cat => cat.name === currentCategory)?.description || 'Curated videos for your interview prep'}
                 </p>
               </div>
+
+              {(currentCategory === 'Data Structures & Algorithms' || currentCategory === 'dsa') && (
+                <div className="mb-6 flex flex-wrap gap-2">
+                  {dsaSubcategories.map((sub) => (
+                    <button
+                      key={sub.key}
+                      onClick={() => { setSelectedDsaSubcat(sub.key); fetchVideos('dsa', sub.key); }}
+                      className={`px-3 py-1 rounded-md text-sm transition-all focus:outline-none focus:ring-0 ${selectedDsaSubcat === sub.key ? 'glow-cyan' : ''}`}
+                      style={{
+                        backgroundColor: selectedDsaSubcat === sub.key ? colors['intermediate-gray'] : colors['dark-charcoal'],
+                        color: selectedDsaSubcat === sub.key ? colors['glowing-cyan'] : colors['light-gray'],
+                        border: `1px solid ${selectedDsaSubcat === sub.key ? colors['glowing-cyan'] : '#2a2f36'}`
+                      }}
+                    >
+                      {sub.label}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {loading && (
                 <div className="text-center py-16">

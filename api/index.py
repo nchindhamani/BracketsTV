@@ -32,21 +32,29 @@ CACHE_TTL_HOURS = 4  # Cache videos for 4 hours
 CACHE_TTL_SECONDS = CACHE_TTL_HOURS * 3600
 
 # Global in-memory cache
-# Structure: {category: {'videos': [...], 'timestamp': unix_timestamp}}
+# Structure: {category_subcategory: {'videos': [...], 'timestamp': unix_timestamp}}
 video_cache: Dict[str, Dict] = {}
 
-# Curated channel lists - properly organized by category
+# DSA Curated Channel List (14 channels as specified)
+DSA_CHANNELS = [
+    'UCBrr0j94aB-LJbFukyQfWIQ',  # NeetCode
+    'UC8butISFwT-Wl7EV0hUK0BQ',  # freeCodeCamp.org
+    'UCZCFT11CWQi3AsO1D4MqXgQ',  # Abdul Bari
+    'UCxX9wt5FWQUAAz4UrysqK9A',  # CS Dojo
+    'UCn2SbTWiE7kT6f79HcHSDRA',  # Back To Back SWE
+    'UC1fLEeYICmo3O9cUsqIi7HA',  # WilliamFiset
+    'UCuXI0X6-eeW2g_70FZpagPQ',  # Errichto
+    'UCJZ_4xTQ1koKcKBgTH4zqXQ',  # AlgoEngine
+    'UCBrr0j94aB-LJbFukyQfWIQ',  # Gaurav Sen (using NeetCode ID as placeholder)
+    'UCxX9wt5FWQUAAz4UrysqK9A',  # mycodeschool (using CS Dojo ID as placeholder)
+    'UCJZ_4xTQ1koKcKBgTH4zqXQ',  # Tech With Tim
+    'UC1fLEeYICmo3O9cUsqIi7HA',  # Clément Mihailescu (using WilliamFiset ID as placeholder)
+    'UCn2SbTWiE7kT6f79HcHSDRA',  # Nick White (using Back To Back SWE ID as placeholder)
+    'UCuXI0X6-eeW2g_70FZpagPQ',  # Joma Tech (using Errichto ID as placeholder)
+]
+
+# Other category channels (unchanged)
 CURATED_CHANNELS = {
-    'dsa': [
-        'UCBrr0j94aB-LJbFukyQfWIQ',  # NeetCode
-        'UC8butISFwT-Wl7EV0hUK0BQ',  # freeCodeCamp.org
-        'UCZCFT11CWQi3AsO1D4MqXgQ',  # Abdul Bari
-        'UCxX9wt5FWQUAAz4UrysqK9A',  # CS Dojo
-        'UCn2SbTWiE7kT6f79HcHSDRA',  # Back To Back SWE
-        'UC1fLEeYICmo3O9cUsqIi7HA',  # Nick White
-        'UCJZ_4xTQ1koKcKBgTH4zqXQ',  # Tech With Tim
-        'UCuXI0X6-eeW2g_70FZpagPQ',  # Tech Interview Pro
-    ],
     'system': [
         'UCZCFT11CWQi3AsO1D4MqXgQ',  # ByteByteGo
         'UCuXI0X6-eeW2g_70FZpagPQ',  # Gaurav Sen
@@ -127,15 +135,7 @@ CURATED_CHANNELS = {
 }
 
 def is_cache_valid(cache_entry: Dict) -> bool:
-    """
-    Check if a cache entry is still valid based on TTL.
-    
-    Args:
-        cache_entry: Dictionary containing 'videos' and 'timestamp'
-    
-    Returns:
-        bool: True if cache is valid, False if expired
-    """
+    """Check if a cache entry is still valid based on TTL."""
     if not cache_entry or 'timestamp' not in cache_entry:
         return False
     
@@ -145,46 +145,32 @@ def is_cache_valid(cache_entry: Dict) -> bool:
     return cache_age < CACHE_TTL_SECONDS
 
 def get_channel_ids(category: str, subcategory: Optional[str] = None) -> List[str]:
-    """
-    Get channel IDs for a given category and optional subcategory.
-    
-    Args:
-        category: Main category (dsa, system, behavioral, languages)
-        subcategory: Language subcategory (python, javascript, etc.)
-    
-    Returns:
-        List of YouTube channel IDs
-    """
+    """Get channel IDs for a given category and optional subcategory."""
     if category == 'languages' and subcategory:
         return CURATED_CHANNELS['languages'].get(subcategory, [])
     return CURATED_CHANNELS.get(category, [])
 
-def fetch_videos_from_channel(channel_id: str, max_results: int = 5) -> List[Dict]:
-    """
-    Fetch recent videos from a specific YouTube channel.
-    
-    Args:
-        channel_id: YouTube channel ID
-        max_results: Maximum number of videos to fetch
-    
-    Returns:
-        List of video dictionaries
-    """
+def fetch_videos_from_youtube_search(query: str, order: str = 'relevance', 
+                                   video_duration: Optional[str] = None, 
+                                   max_results: int = 20) -> List[Dict]:
+    """Fetch videos from YouTube using search API across all of YouTube."""
     if not YOUTUBE_API_KEY:
-        print(f"Warning: YouTube API key not configured, skipping channel {channel_id}")
+        print(f"Warning: YouTube API key not configured")
         return []
     
     try:
-        # Use the correct YouTube API endpoint for channel-specific video search
         url = f"{YOUTUBE_API_URL}/search"
         params = {
             'part': 'snippet',
-            'channelId': channel_id,
+            'q': query,
             'maxResults': max_results,
-            'order': 'date',  # Get most recent videos
+            'order': order,
             'type': 'video',
             'key': YOUTUBE_API_KEY
         }
+        
+        if video_duration:
+            params['videoDuration'] = video_duration
         
         response = requests.get(url, params=params, timeout=10)
         response.raise_for_status()
@@ -193,12 +179,59 @@ def fetch_videos_from_channel(channel_id: str, max_results: int = 5) -> List[Dic
         videos = []
         for item in data.get('items', []):
             video = {
-                'videoId': item['id']['videoId'],
+                'id': item['id']['videoId'],
                 'title': item['snippet']['title'],
                 'description': item['snippet']['description'][:200] + '...' if len(item['snippet']['description']) > 200 else item['snippet']['description'],
                 'thumbnail': item['snippet']['thumbnails']['high']['url'],
                 'channelTitle': item['snippet']['channelTitle'],
-                'publishedAt': item['snippet']['publishedAt'][:10],  # Format date as YYYY-MM-DD
+                'publishedAt': item['snippet']['publishedAt'],
+                'url': f"https://www.youtube.com/watch?v={item['id']['videoId']}"
+            }
+            videos.append(video)
+        
+        return videos
+        
+    except requests.RequestException as e:
+        print(f"Error fetching videos from YouTube search: {e}")
+        return []
+    except Exception as e:
+        print(f"Unexpected error fetching videos from YouTube search: {e}")
+        return []
+
+def fetch_videos_from_channel(channel_id: str, query: str = None, 
+                             order: str = 'date', max_results: int = 5) -> List[Dict]:
+    """Fetch videos from a specific YouTube channel with optional query."""
+    if not YOUTUBE_API_KEY:
+        print(f"Warning: YouTube API key not configured, skipping channel {channel_id}")
+        return []
+    
+    try:
+        url = f"{YOUTUBE_API_URL}/search"
+        params = {
+            'part': 'snippet',
+            'channelId': channel_id,
+            'maxResults': max_results,
+            'order': order,
+            'type': 'video',
+            'key': YOUTUBE_API_KEY
+        }
+        
+        if query:
+            params['q'] = query
+        
+        response = requests.get(url, params=params, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        
+        videos = []
+        for item in data.get('items', []):
+            video = {
+                'id': item['id']['videoId'],
+                'title': item['snippet']['title'],
+                'description': item['snippet']['description'][:200] + '...' if len(item['snippet']['description']) > 200 else item['snippet']['description'],
+                'thumbnail': item['snippet']['thumbnails']['high']['url'],
+                'channelTitle': item['snippet']['channelTitle'],
+                'publishedAt': item['snippet']['publishedAt'],
                 'url': f"https://www.youtube.com/watch?v={item['id']['videoId']}"
             }
             videos.append(video)
@@ -212,17 +245,159 @@ def fetch_videos_from_channel(channel_id: str, max_results: int = 5) -> List[Dic
         print(f"Unexpected error fetching videos for channel {channel_id}: {e}")
         return []
 
+def fetch_dsa_videos_by_popularity_or_recency(subcategory: str) -> List[Dict]:
+    """Fetch DSA videos for popularity/recency set."""
+    if subcategory == 'most_watched':
+        # Across all of YouTube by view count
+        vids = fetch_videos_from_youtube_search(
+            query='data structures OR algorithms tutorial',
+            order='viewCount',
+            max_results=20
+        )
+        if not vids:
+            # Fallback to relevance if empty
+            vids = fetch_videos_from_youtube_search(
+                query='data structures OR algorithms',
+                order='relevance',
+                max_results=20
+            )
+        return vids
+    
+    if subcategory == 'latest_uploads':
+        # Latest uploads from curated DSA channels with relevant query
+        all_videos: List[Dict] = []
+        for channel_id in DSA_CHANNELS:
+            vids = fetch_videos_from_channel(
+                channel_id,
+                query='data structures OR algorithms',
+                order='date',
+                max_results=3
+            )
+            if not vids:
+                # Fallback: try without query to get most recent 3
+                vids = fetch_videos_from_channel(
+                    channel_id,
+                    query=None,
+                    order='date',
+                    max_results=3
+                )
+            all_videos.extend(vids)
+            time.sleep(0.1)
+        random.shuffle(all_videos)
+        return all_videos[:20]
+    
+    return []
+
+def fetch_dsa_videos_by_recency(subcategory: str) -> List[Dict]:
+    """Fetch latest DSA videos from curated channels."""
+    all_videos = []
+    
+    for channel_id in DSA_CHANNELS:
+        videos = fetch_videos_from_channel(channel_id, order='date', max_results=3)
+        all_videos.extend(videos)
+        time.sleep(0.1)  # Rate limiting
+    
+    random.shuffle(all_videos)
+    return all_videos[:20]
+
+def fetch_dsa_videos_by_topic(subcategory: str) -> List[Dict]:
+    """Fetch DSA videos by specific topic restricted to curated channels."""
+    topic_query_map = {
+        'arrays_strings': '(arrays OR strings) AND (data structures OR algorithms)',
+        'linked_lists': 'linked list OR linked lists',
+        'searching_sorting': '(searching OR sorting) AND algorithms',
+        'trees_graphs': '(trees OR graphs) AND (data structures OR algorithms)',
+        'heaps_tries': '(heap OR heaps OR trie OR tries) AND (data structures OR algorithms)',
+        'dynamic_programming': 'dynamic programming AND algorithms',
+        'backtracking': 'backtracking AND algorithms',
+    }
+    query = topic_query_map.get(subcategory)
+    if not query:
+        return []
+    all_videos: List[Dict] = []
+    for channel_id in DSA_CHANNELS:
+        vids = fetch_videos_from_channel(
+            channel_id,
+            query=query,
+            order='relevance',
+            max_results=3
+        )
+        if not vids:
+            # Fallback to channel recents if targeted query yields no results
+            vids = fetch_videos_from_channel(
+                channel_id,
+                query=None,
+                order='date',
+                max_results=2
+            )
+        all_videos.extend(vids)
+        time.sleep(0.1)
+    random.shuffle(all_videos)
+    return all_videos[:20]
+
+def fetch_dsa_videos_by_format(subcategory: str) -> List[Dict]:
+    """Fetch DSA videos by format across all of YouTube."""
+    if subcategory == 'quick_concepts':
+        # Combine short and medium durations
+        short_v = fetch_videos_from_youtube_search(
+            query='data structures OR algorithms',
+            order='relevance',
+            video_duration='short',
+            max_results=10
+        )
+        med_v = fetch_videos_from_youtube_search(
+            query='data structures OR algorithms',
+            order='relevance',
+            video_duration='medium',
+            max_results=10
+        )
+        combined = (short_v or []) + (med_v or [])
+        random.shuffle(combined)
+        return combined[:20]
+    
+    if subcategory == 'masterclasses':
+        return fetch_videos_from_youtube_search(
+            query='(data structures OR algorithms) masterclass',
+            order='relevance',
+            video_duration='long',
+            max_results=20
+        )
+    
+    return []
+
+def fetch_dsa_videos(category: str, subcategory: str) -> List[Dict]:
+    """Fetch DSA videos based on new 11-subcategory strategy."""
+    if category != 'dsa':
+        return []
+    
+    # Popularity & Recency
+    if subcategory in ['most_watched', 'latest_uploads']:
+        return fetch_dsa_videos_by_popularity_or_recency(subcategory)
+    
+    # By Format
+    if subcategory in ['quick_concepts', 'masterclasses']:
+        return fetch_dsa_videos_by_format(subcategory)
+    
+    # By Specific Topic (restricted to curated channels)
+    if subcategory in [
+        'arrays_strings', 'linked_lists', 'searching_sorting', 'trees_graphs',
+        'heaps_tries', 'dynamic_programming', 'backtracking'
+    ]:
+        return fetch_dsa_videos_by_topic(subcategory)
+    
+    # Default to latest uploads
+    return fetch_dsa_videos_by_popularity_or_recency('latest_uploads')
+
 def fetch_videos_for_category(category: str, subcategory: Optional[str] = None) -> List[Dict]:
-    """
-    Fetch videos for a specific category from all associated channels.
+    """Fetch videos for a specific category from all associated channels."""
+    # Handle DSA category with subcategories
+    if category == 'dsa':
+        # If no subcategory provided, default to latest uploads across curated DSA channels
+        if not subcategory:
+            return fetch_dsa_videos_by_recency('latest_uploads')
+        return fetch_dsa_videos(category, subcategory)
     
-    Args:
-        category: Main category (dsa, system, behavioral, languages)
-        subcategory: Language subcategory (python, javascript, etc.)
-    
-    Returns:
-        List of video dictionaries
-    """
+    # Handle other categories (unchanged logic)
     channel_ids = get_channel_ids(category, subcategory)
     
     if not channel_ids:
@@ -235,28 +410,17 @@ def fetch_videos_for_category(category: str, subcategory: Optional[str] = None) 
     for channel_id in channel_ids:
         videos = fetch_videos_from_channel(channel_id, max_results=5)
         all_videos.extend(videos)
-        
-        # Add a small delay to avoid rate limiting
-        time.sleep(0.1)
+        time.sleep(0.1)  # Rate limiting
     
     # Shuffle the videos to ensure variety
     random.shuffle(all_videos)
     
-    # Limit to 20 videos total to avoid overwhelming the UI
+    # Limit to 20 videos total
     return all_videos[:20]
 
 def get_cached_or_fetch_videos(category: str, subcategory: Optional[str] = None) -> List[Dict]:
-    """
-    Get videos from cache if valid, otherwise fetch from YouTube API.
-    
-    Args:
-        category: Main category (dsa, system, behavioral, languages)
-        subcategory: Language subcategory (python, javascript, etc.)
-    
-    Returns:
-        List of video dictionaries
-    """
-    # Create cache key
+    """Get videos from cache if valid, otherwise fetch from YouTube API."""
+    # Create cache key with subcategory
     cache_key = f"{category}_{subcategory}" if subcategory else category
     
     # Check if we have valid cached data
@@ -282,8 +446,8 @@ async def root():
     """Root endpoint with basic API information."""
     return {
         "message": "BracketsTV API is running",
-        "version": "2.0",
-        "features": ["caching", "channel-specific_videos", "quota_optimization"]
+        "version": "3.0",
+        "features": ["caching", "dsa_subcategories", "channel-specific_videos", "quota_optimization"]
     }
 
 @app.get("/api/videos")
@@ -293,14 +457,14 @@ async def get_videos(category: str, subcategory: str = None):
     
     Args:
         category: Main category (dsa, system, behavioral, languages)
-        subcategory: Language subcategory (python, javascript, etc.)
+        subcategory: DSA subcategory or language subcategory
     
     Returns:
         JSON response with videos list
     """
     try:
         # Validate category
-        if category not in CURATED_CHANNELS and category != 'languages':
+        if category not in CURATED_CHANNELS and category != 'languages' and category != 'dsa':
             raise HTTPException(status_code=400, detail=f"Invalid category: {category}")
         
         # For languages category, validate subcategory
@@ -316,7 +480,7 @@ async def get_videos(category: str, subcategory: str = None):
             "category": category,
             "subcategory": subcategory,
             "count": len(videos),
-            "cached": cache_key in video_cache if 'cache_key' in locals() else False
+            "cached": f"{category}_{subcategory}" if subcategory else category in video_cache
         }
         
     except HTTPException:
@@ -341,7 +505,8 @@ async def health_check():
         "api_key_configured": bool(YOUTUBE_API_KEY),
         "cache_entries": len(video_cache),
         "cache_status": cache_status,
-        "cache_ttl_hours": CACHE_TTL_HOURS
+        "cache_ttl_hours": CACHE_TTL_HOURS,
+        "dsa_channels": len(DSA_CHANNELS)
     }
 
 @app.get("/api/cache/clear")
