@@ -70,18 +70,18 @@ print("-" * 80)
 
 def get_all_subcategories() -> List[Dict[str, Any]]:
     """
-    Fetch all subcategories from the database.
+    Fetch all active subcategories from the database.
     
     Returns:
         List of subcategory dictionaries with columns: id, name, category, 
         strategy, search_query, order_param, video_duration, max_results
     """
     try:
-        print("\n📋 Fetching subcategories from database...")
-        response = supabase.table('subcategories').select('*').execute()
+        print("\n📋 Fetching active subcategories from database...")
+        response = supabase.table('subcategories').select('*').eq('is_active', True).execute()
         
         subcategories = response.data
-        print(f"   ✓ Found {len(subcategories)} subcategories to process")
+        print(f"   ✓ Found {len(subcategories)} active subcategories to process")
         return subcategories
         
     except Exception as e:
@@ -91,7 +91,7 @@ def get_all_subcategories() -> List[Dict[str, Any]]:
 
 def get_channel_handles_for_subcategory(subcategory_id: int) -> List[str]:
     """
-    Get the list of YouTube channel handles associated with a subcategory.
+    Get the list of active YouTube channel handles associated with a subcategory.
     
     Args:
         subcategory_id: The ID of the subcategory
@@ -100,17 +100,18 @@ def get_channel_handles_for_subcategory(subcategory_id: int) -> List[str]:
         List of channel handles (e.g., ['@NeetCode', '@freeCodeCamp'])
     """
     try:
-        # Join subcategory_channels and channels tables
+        # Join subcategory_channels and channels tables, filter for active channels only
         response = supabase.table('subcategory_channels') \
-            .select('channels(handle)') \
+            .select('channels!inner(handle, is_active)') \
             .eq('subcategory_id', subcategory_id) \
+            .eq('channels.is_active', True) \
             .execute()
         
         # Extract channel handles from nested structure
         handles = [item['channels']['handle'] for item in response.data if item.get('channels')]
         
         if handles:
-            print(f"   → Using {len(handles)} curated channels: {', '.join(handles[:3])}{'...' if len(handles) > 3 else ''}")
+            print(f"   → Using {len(handles)} active curated channels: {', '.join(handles[:3])}{'...' if len(handles) > 3 else ''}")
         
         return handles
         
