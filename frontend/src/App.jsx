@@ -12,6 +12,9 @@ const colors = {
   'light-gray': '#E0E0E0'
 };
 
+// API base URL
+const API_BASE_URL = 'http://localhost:8000';
+
 // Custom TextIcon component for languages without specific icons
 const TextIcon = ({ name }) => (
   <div className="flex items-center justify-center h-10 w-10 border border-gray-600 rounded-md bg-gray-800">
@@ -19,7 +22,7 @@ const TextIcon = ({ name }) => (
   </div>
 );
 
-// Navigation categories
+// Navigation categories (static - these are the main categories)
 const categories = [
   {
     name: 'Data Structures & Algorithms',
@@ -29,7 +32,7 @@ const categories = [
   },
   {
     name: 'System Design',
-    path: 'system',
+    path: 'system_design',
     icon: <FaCogs className="w-4 h-4" />,
     description: 'Learn to design scalable systems'
   },
@@ -47,77 +50,130 @@ const categories = [
   }
 ];
 
-// Language configuration for the Language Hub
+// Language configuration for the Language Hub (static)
 const languages = [
-  { name: 'Python', path: 'python', icon: <FaPython className="w-8 h-8" /> },
-  { name: 'JavaScript', path: 'javascript', icon: <FaJs className="w-8 h-8" /> },
-  { name: 'Java', path: 'java', icon: <FaJava className="w-8 h-8" /> },
-  { name: 'C++', path: 'cpp', icon: <TextIcon name="C++" /> },
-  { name: 'C#', path: 'csharp', icon: <TextIcon name="C#" /> },
-  { name: 'Go', path: 'go', icon: <DiGo className="w-8 h-8" /> },
-  { name: 'Rust', path: 'rust', icon: <FaRust className="w-8 h-8" /> },
-  { name: 'SQL', path: 'sql', icon: <FaDatabase className="w-8 h-8" /> },
-  { name: 'Kotlin', path: 'kotlin', icon: <TextIcon name="Kotlin" /> },
-  { name: 'Swift', path: 'swift', icon: <DiSwift className="w-8 h-8" /> }
+  { name: 'Python', path: 'language_python', icon: <FaPython className="w-8 h-8" /> },
+  { name: 'JavaScript', path: 'language_javascript', icon: <FaJs className="w-8 h-8" /> },
+  { name: 'Java', path: 'language_java', icon: <FaJava className="w-8 h-8" /> },
+  { name: 'C++', path: 'language_cpp', icon: <TextIcon name="C++" /> },
+  { name: 'C#', path: 'language_csharp', icon: <TextIcon name="C#" /> },
+  { name: 'Go', path: 'language_go', icon: <DiGo className="w-8 h-8" /> },
+  { name: 'Rust', path: 'language_rust', icon: <FaRust className="w-8 h-8" /> },
+  { name: 'SQL', path: 'language_sql', icon: <FaDatabase className="w-8 h-8" /> },
+  { name: 'Kotlin', path: 'language_kotlin', icon: <TextIcon name="Kotlin" /> },
+  { name: 'Swift', path: 'language_swift', icon: <DiSwift className="w-8 h-8" /> }
 ];
 
 function App() {
+  // State management
+  const [activeMainCategory, setActiveMainCategory] = useState('dsa');
+  const [subcategories, setSubcategories] = useState([]);
+  const [activeSubcategory, setActiveSubcategory] = useState(null);
   const [videos, setVideos] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoadingSubcategories, setIsLoadingSubcategories] = useState(false);
+  const [isLoadingVideos, setIsLoadingVideos] = useState(false);
   const [error, setError] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
-  const [currentCategory, setCurrentCategory] = useState('Data Structures & Algorithms');
-  const [selectedLanguage, setSelectedLanguage] = useState(null);
-  const [selectedDsaSubcat, setSelectedDsaSubcat] = useState('latest_uploads');
 
-  // Fetch videos from API
-  const fetchVideos = async (category, subcategory = null) => {
-    setLoading(true);
-    setError(null);
-    
-    try {
-      const url = subcategory 
-        ? `http://localhost:8001/api/videos?category=${category}&subcategory=${subcategory}`
-        : `http://localhost:8001/api/videos?category=${category}`;
-      
-      const response = await fetch(url);
-      const data = await response.json();
-      
-      if (data.videos && data.videos.length > 0) {
-        setVideos(data.videos);
-      } else {
-        setVideos([]);
-        setError('No videos found for this category');
+  // Fetch subcategories whenever activeMainCategory changes
+  useEffect(() => {
+    const fetchSubcategories = async () => {
+      // Only fetch subcategories for non-language categories
+      if (activeMainCategory === 'languages') {
+        setSubcategories([]);
+        return;
       }
-    } catch (err) {
-      setError('Failed to fetch videos');
-      console.error('Error fetching videos:', err);
-    } finally {
-      setLoading(false);
+
+      setIsLoadingSubcategories(true);
+      setError(null);
+      
+      try {
+        const response = await fetch(`${API_BASE_URL}/?type=subcategories&category=${activeMainCategory}`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (Array.isArray(data) && data.length > 0) {
+          setSubcategories(data);
+          // Automatically set the first subcategory as active
+          setActiveSubcategory(data[0]);
+        } else {
+          setSubcategories([]);
+          setActiveSubcategory(null);
+        }
+      } catch (err) {
+        console.error('Error fetching subcategories:', err);
+        setError(`Failed to load subcategories: ${err.message}`);
+        setSubcategories([]);
+        setActiveSubcategory(null);
+      } finally {
+        setIsLoadingSubcategories(false);
+      }
+    };
+
+    fetchSubcategories();
+  }, [activeMainCategory]);
+
+  // Fetch videos whenever activeSubcategory changes
+  useEffect(() => {
+    const fetchVideos = async () => {
+      // Don't fetch if no subcategory is selected or if we're on the language hub
+      if (!activeSubcategory || activeMainCategory === 'languages') {
+        setVideos([]);
+        return;
+      }
+
+      setIsLoadingVideos(true);
+      setError(null);
+      
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/?type=videos&category=${activeMainCategory}&subcategory=${encodeURIComponent(activeSubcategory)}`
+        );
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (Array.isArray(data) && data.length > 0) {
+          setVideos(data);
+        } else {
+          setVideos([]);
+        }
+      } catch (err) {
+        console.error('Error fetching videos:', err);
+        setError(`Failed to load videos: ${err.message}`);
+        setVideos([]);
+      } finally {
+        setIsLoadingVideos(false);
+      }
+    };
+
+    fetchVideos();
+  }, [activeMainCategory, activeSubcategory]);
+
+  // Handle navigation clicks
+  const handleNavClick = (categoryPath) => {
+    if (categoryPath === 'languages') {
+      setActiveMainCategory('languages');
+      setSubcategories([]);
+      setActiveSubcategory(null);
+      setVideos([]);
+      return;
     }
+    
+    setActiveMainCategory(categoryPath);
   };
 
-  // Load initial videos
-  useEffect(() => {
-    // Ensure initial view is DSA latest uploads and the toolbar is visible
-    fetchVideos('dsa', 'latest_uploads');
-    setSelectedDsaSubcat('latest_uploads');
-  }, []);
-
-  // DSA subcategories configuration (new 11 only)
-  const dsaSubcategories = [
-    { label: 'Most Watched', key: 'most_watched' },
-    { label: 'Latest Uploads', key: 'latest_uploads' },
-    { label: 'Quick Concepts (Under 20 mins)', key: 'quick_concepts' },
-    { label: 'Masterclasses', key: 'masterclasses' },
-    { label: 'Arrays & Strings', key: 'arrays_strings' },
-    { label: 'Linked Lists', key: 'linked_lists' },
-    { label: 'Searching & Sorting', key: 'searching_sorting' },
-    { label: 'Trees & Graphs', key: 'trees_graphs' },
-    { label: 'Heaps & Tries', key: 'heaps_tries' },
-    { label: 'Dynamic Programming', key: 'dynamic_programming' },
-    { label: 'Backtracking', key: 'backtracking' }
-  ];
+  // Handle language selection from the Language Hub
+  const handleLanguageClick = (languagePath) => {
+    setActiveMainCategory(languagePath);
+  };
 
   // LanguageHub Component
   const LanguageHub = () => (
@@ -133,7 +189,7 @@ function App() {
         {languages.map((language) => (
           <button
             key={language.name}
-            onClick={() => handleLanguageClick(language.name)}
+            onClick={() => handleLanguageClick(language.path)}
             className="rounded-lg p-6 cursor-pointer transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-0"
             style={{ 
               backgroundColor: colors['intermediate-gray'],
@@ -141,10 +197,10 @@ function App() {
               outline: 'none'
             }}
             onMouseEnter={(e) => {
-              e.target.style.boxShadow = '0 0 20px rgba(0,255,255,0.3)';
+              e.currentTarget.style.boxShadow = '0 0 20px rgba(0,255,255,0.3)';
             }}
             onMouseLeave={(e) => {
-              e.target.style.boxShadow = 'none';
+              e.currentTarget.style.boxShadow = 'none';
             }}
           >
             <div className="flex flex-col items-center space-y-3">
@@ -160,47 +216,6 @@ function App() {
       </div>
     </div>
   );
-
-  // Handle navigation clicks
-  const handleNavClick = (categoryName) => {
-    if (categoryName === 'Language-Specific Prep') {
-      setCurrentCategory('Language-Specific Prep');
-      return;
-    }
-    
-    setCurrentCategory(categoryName);
-    setSelectedLanguage(null);
-    if (categoryName === 'Data Structures & Algorithms') {
-      setSelectedDsaSubcat('latest_uploads');
-    }
-    
-    if (['Data Structures & Algorithms', 'System Design', 'Behavioral Questions'].includes(categoryName)) {
-      const categoryMap = {
-        'Data Structures & Algorithms': 'dsa',
-        'System Design': 'system',
-        'Behavioral Questions': 'behavioral'
-      };
-      fetchVideos(categoryMap[categoryName]);
-    }
-  };
-
-  // Handle language selection
-  const handleLanguageClick = (languageName) => {
-    setSelectedLanguage(languageName);
-    const languageMap = {
-      'Python': 'python',
-      'JavaScript': 'javascript',
-      'Java': 'java',
-      'C++': 'cpp',
-      'C#': 'csharp',
-      'Go': 'go',
-      'Rust': 'rust',
-      'SQL': 'sql',
-      'Kotlin': 'kotlin',
-      'Swift': 'swift'
-    };
-    fetchVideos('languages', languageMap[languageName]);
-  };
 
   // Video Player Component
   const VideoPlayer = () => (
@@ -219,7 +234,7 @@ function App() {
         </button>
         
         <a
-          href={`https://www.youtube.com/watch?v=${selectedVideo.id}`}
+          href={`https://www.youtube.com/watch?v=${selectedVideo.video_id}`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors duration-300 hover:scale-105 focus:outline-none focus:ring-0"
@@ -237,7 +252,7 @@ function App() {
         <div className="max-w-6xl mx-auto">
           <div className="aspect-video bg-black rounded-lg overflow-hidden mb-6">
             <iframe
-              src={`https://www.youtube.com/embed/${selectedVideo.id}?autoplay=1&rel=0&modestbranding=1`}
+              src={`https://www.youtube.com/embed/${selectedVideo.video_id}?autoplay=1&rel=0&modestbranding=1`}
               title={selectedVideo.title}
               className="w-full h-full"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -251,9 +266,9 @@ function App() {
             </h1>
             
             <div className="flex items-center space-x-4 text-sm" style={{ color: colors['light-gray'], opacity: 0.7 }}>
-              <span>{selectedVideo.channelTitle}</span>
+              <span>{selectedVideo.channel_title}</span>
               <span>•</span>
-              <span>{new Date(selectedVideo.publishedAt).toLocaleDateString()}</span>
+              <span>{new Date(selectedVideo.published_at).toLocaleDateString()}</span>
             </div>
             
             {selectedVideo.description && (
@@ -262,10 +277,11 @@ function App() {
                   Description
                 </summary>
                 <div 
-                  className="prose prose-invert max-w-none"
+                  className="prose prose-invert max-w-none whitespace-pre-wrap"
                   style={{ color: colors['light-gray'], opacity: 0.8 }}
-                  dangerouslySetInnerHTML={{ __html: selectedVideo.description }}
-                />
+                >
+                  {selectedVideo.description}
+                </div>
               </details>
             )}
           </div>
@@ -275,189 +291,192 @@ function App() {
   );
 
   // Video Grid Component
-  const VideoGrid = () => (
-    <div className="min-h-screen" style={{ backgroundColor: colors['near-black'] }}>
-      <div className="flex">
-        {/* Sidebar */}
-        <aside className="w-72 h-screen overflow-y-auto" style={{ backgroundColor: colors['dark-charcoal'] }}>
-          <div className="p-6">
-            <div className="mb-8">
-              <h1 className="text-2xl font-bold mb-2" style={{ color: colors['glowing-cyan'] }}>
-                BracketsTV
-              </h1>
-              <p className="text-sm" style={{ color: colors['light-gray'], opacity: 0.6 }}>
-                Curated Interview Prep
-              </p>
-            </div>
-            
-            <nav className="space-y-2">
-              {categories.map((category) => (
-                <div key={category.path}>
-                  <button
-                    onClick={() => handleNavClick(category.name)}
-                    className={`w-full flex items-center p-3 rounded-lg transition-colors duration-300 border-l-2
-                      ${currentCategory === category.name
-                        ? 'border-cyan-400 shadow-[0_0_10px_#00FFFF]'
-                        : 'border-transparent hover:transition-colors duration-300'
-                      }`}
-                    style={{
-                      backgroundColor: currentCategory === category.name ? colors['near-black'] : 'transparent',
-                      color: currentCategory === category.name ? colors['glowing-cyan'] : colors['light-gray']
-                    }}
-                    onMouseEnter={(e) => {
-                      if (currentCategory !== category.name) {
-                        e.target.style.backgroundColor = colors['intermediate-gray'];
-                        e.target.style.color = colors['glowing-cyan'];
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (currentCategory !== category.name) {
-                        e.target.style.backgroundColor = 'transparent';
-                        e.target.style.color = colors['light-gray'];
-                      }
-                    }}
-                  >
-                    {category.icon}
-                    <div className="ml-3 text-left">
-                      <div className="font-medium">{category.name}</div>
-                      <div className="text-xs opacity-60">{category.description}</div>
-                    </div>
-                  </button>
-                </div>
-              ))}
-            </nav>
-          </div>
-        </aside>
+  const VideoGrid = () => {
+    // Get current category display info
+    const currentCategoryInfo = categories.find(cat => cat.path === activeMainCategory);
+    const isLanguageHub = activeMainCategory === 'languages';
+    const isLoading = isLoadingSubcategories || isLoadingVideos;
 
-        {/* Main Content */}
-        <main className="flex-1 p-6">
-          {currentCategory === 'Language-Specific Prep' ? (
-            <LanguageHub />
-          ) : (
-            <div>
+    return (
+      <div className="min-h-screen" style={{ backgroundColor: colors['near-black'] }}>
+        <div className="flex">
+          {/* Sidebar */}
+          <aside className="w-72 h-screen overflow-y-auto fixed" style={{ backgroundColor: colors['dark-charcoal'] }}>
+            <div className="p-6">
               <div className="mb-8">
-                <h2 className="text-3xl font-bold mb-2" style={{ color: colors['light-gray'] }}>
-                  {categories.find(cat => cat.name === currentCategory)?.name || 'Videos'}
-                </h2>
-                <p className="text-lg" style={{ color: colors['light-gray'], opacity: 0.6 }}>
-                  {categories.find(cat => cat.name === currentCategory)?.description || 'Curated videos for your interview prep'}
+                <h1 className="text-2xl font-bold mb-2" style={{ color: colors['glowing-cyan'] }}>
+                  BracketsTV
+                </h1>
+                <p className="text-sm" style={{ color: colors['light-gray'], opacity: 0.6 }}>
+                  Curated Interview Prep
                 </p>
               </div>
-
-              {(currentCategory === 'Data Structures & Algorithms' || currentCategory === 'dsa') && (
-                <div className="mb-6 flex flex-wrap gap-2">
-                  {dsaSubcategories.map((sub) => (
+              
+              <nav className="space-y-2">
+                {categories.map((category) => (
+                  <div key={category.path}>
                     <button
-                      key={sub.key}
-                      onClick={() => { setSelectedDsaSubcat(sub.key); fetchVideos('dsa', sub.key); }}
-                      className={`px-3 py-1 rounded-md text-sm transition-all focus:outline-none focus:ring-0 ${selectedDsaSubcat === sub.key ? 'glow-cyan' : ''}`}
+                      onClick={() => handleNavClick(category.path)}
+                      className={`w-full flex items-center p-3 rounded-lg transition-colors duration-300 border-l-2
+                        ${activeMainCategory === category.path
+                          ? 'border-cyan-400 shadow-[0_0_10px_#00FFFF]'
+                          : 'border-transparent hover:transition-colors duration-300'
+                        }`}
                       style={{
-                        backgroundColor: selectedDsaSubcat === sub.key ? colors['intermediate-gray'] : colors['dark-charcoal'],
-                        color: selectedDsaSubcat === sub.key ? colors['glowing-cyan'] : colors['light-gray'],
-                        border: `1px solid ${selectedDsaSubcat === sub.key ? colors['glowing-cyan'] : '#2a2f36'}`
+                        backgroundColor: activeMainCategory === category.path ? colors['near-black'] : 'transparent',
+                        color: activeMainCategory === category.path ? colors['glowing-cyan'] : colors['light-gray']
                       }}
-                    >
-                      {sub.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {loading && (
-                <div className="text-center py-16">
-                  <div className="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center animate-spin" style={{ backgroundColor: colors['dark-charcoal'] }}>
-                    <FaCode className="w-12 h-12" style={{ color: colors['glowing-cyan'] }} />
-                  </div>
-                  <h3 className="text-2xl font-semibold mb-4" style={{ color: colors['light-gray'] }}>Loading Videos...</h3>
-                  <p className="text-lg" style={{ color: colors['light-gray'], opacity: 0.6 }}>
-                    Fetching the latest content for you
-                  </p>
-                </div>
-              )}
-
-              {error && (
-                <div className="text-center py-16">
-                  <div className="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center" style={{ backgroundColor: colors['dark-charcoal'] }}>
-                    <FaCode className="w-12 h-12" style={{ color: colors['light-gray'], opacity: 0.5 }} />
-                  </div>
-                  <h3 className="text-2xl font-semibold mb-4" style={{ color: colors['light-gray'] }}>Error Loading Videos</h3>
-                  <p className="text-lg mb-6" style={{ color: colors['light-gray'], opacity: 0.6 }}>
-                    {error}
-                  </p>
-                  <button
-                    onClick={() => fetchVideos(currentCategory === 'Data Structures & Algorithms' ? 'dsa' : currentCategory === 'System Design' ? 'system' : 'behavioral')}
-                    className="px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-0"
-                    style={{ 
-                      backgroundColor: colors['glowing-cyan'],
-                      color: colors['near-black']
-                    }}
-                  >
-                    Try Again
-                  </button>
-                </div>
-              )}
-
-              {!loading && !error && videos.length === 0 && (
-                <div className="text-center py-16">
-                  <div className="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center" style={{ backgroundColor: colors['dark-charcoal'] }}>
-                    <FaCode className="w-12 h-12" style={{ color: colors['light-gray'], opacity: 0.5 }} />
-                  </div>
-                  <h3 className="text-2xl font-semibold mb-4" style={{ color: colors['light-gray'] }}>No Videos Available</h3>
-                  <p className="text-lg mb-6" style={{ color: colors['light-gray'], opacity: 0.6 }}>
-                    No videos found for this category. Try selecting a different category.
-                  </p>
-                  <div className="text-sm" style={{ color: colors['light-gray'], opacity: 0.5 }}>
-                    <p>Videos will appear here once the YouTube API quota resets.</p>
-                    <p>In the meantime, try exploring other categories.</p>
-                  </div>
-                </div>
-              )}
-
-              {!loading && !error && videos.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {videos.map((video) => (
-                    <div
-                      key={video.id}
-                      onClick={() => setSelectedVideo(video)}
-                      className="rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-0"
-                      style={{ backgroundColor: colors['intermediate-gray'] }}
                       onMouseEnter={(e) => {
-                        e.target.style.boxShadow = '0 0 20px rgba(0,255,255,0.3)';
+                        if (activeMainCategory !== category.path) {
+                          e.currentTarget.style.backgroundColor = colors['intermediate-gray'];
+                          e.currentTarget.style.color = colors['glowing-cyan'];
+                        }
                       }}
                       onMouseLeave={(e) => {
-                        e.target.style.boxShadow = 'none';
+                        if (activeMainCategory !== category.path) {
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                          e.currentTarget.style.color = colors['light-gray'];
+                        }
                       }}
                     >
-                      <div className="aspect-video bg-black relative">
-                        <img
-                          src={video.thumbnail}
-                          alt={video.title}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                          <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.8)' }}>
-                            <FaPlay className="w-6 h-6 ml-1" style={{ color: colors['glowing-cyan'] }} />
+                      {category.icon}
+                      <div className="ml-3 text-left">
+                        <div className="font-medium">{category.name}</div>
+                        <div className="text-xs opacity-60">{category.description}</div>
+                      </div>
+                    </button>
+                  </div>
+                ))}
+              </nav>
+            </div>
+          </aside>
+
+          {/* Main Content */}
+          <main className="flex-1 ml-72 p-6">
+            {isLanguageHub ? (
+              <LanguageHub />
+            ) : (
+              <div>
+                <div className="mb-8">
+                  <h2 className="text-3xl font-bold mb-2" style={{ color: colors['light-gray'] }}>
+                    {currentCategoryInfo?.name || 'Videos'}
+                  </h2>
+                  <p className="text-lg" style={{ color: colors['light-gray'], opacity: 0.6 }}>
+                    {currentCategoryInfo?.description || 'Curated videos for your interview prep'}
+                  </p>
+                </div>
+
+                {/* Dynamic Subcategory Navigation */}
+                {subcategories.length > 0 && (
+                  <div className="mb-6 flex flex-wrap gap-2">
+                    {subcategories.map((subcategory) => (
+                      <button
+                        key={subcategory}
+                        onClick={() => setActiveSubcategory(subcategory)}
+                        className={`px-3 py-1 rounded-md text-sm transition-all focus:outline-none focus:ring-0`}
+                        style={{
+                          backgroundColor: activeSubcategory === subcategory ? colors['intermediate-gray'] : colors['dark-charcoal'],
+                          color: activeSubcategory === subcategory ? colors['glowing-cyan'] : colors['light-gray'],
+                          border: `1px solid ${activeSubcategory === subcategory ? colors['glowing-cyan'] : '#2a2f36'}`
+                        }}
+                      >
+                        {subcategory}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Loading State */}
+                {isLoading && (
+                  <div className="text-center py-16">
+                    <div className="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center animate-spin" style={{ backgroundColor: colors['dark-charcoal'] }}>
+                      <FaCode className="w-12 h-12" style={{ color: colors['glowing-cyan'] }} />
+                    </div>
+                    <h3 className="text-2xl font-semibold mb-4" style={{ color: colors['light-gray'] }}>
+                      {isLoadingSubcategories ? 'Loading Categories...' : 'Loading Videos...'}
+                    </h3>
+                    <p className="text-lg" style={{ color: colors['light-gray'], opacity: 0.6 }}>
+                      Fetching the latest content for you
+                    </p>
+                  </div>
+                )}
+
+                {/* Error State */}
+                {error && !isLoading && (
+                  <div className="text-center py-16">
+                    <div className="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center" style={{ backgroundColor: colors['dark-charcoal'] }}>
+                      <FaCode className="w-12 h-12" style={{ color: colors['light-gray'], opacity: 0.5 }} />
+                    </div>
+                    <h3 className="text-2xl font-semibold mb-4" style={{ color: colors['light-gray'] }}>Error Loading Content</h3>
+                    <p className="text-lg mb-6" style={{ color: colors['light-gray'], opacity: 0.6 }}>
+                      {error}
+                    </p>
+                  </div>
+                )}
+
+                {/* No Videos State */}
+                {!isLoading && !error && videos.length === 0 && subcategories.length > 0 && (
+                  <div className="text-center py-16">
+                    <div className="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center" style={{ backgroundColor: colors['dark-charcoal'] }}>
+                      <FaCode className="w-12 h-12" style={{ color: colors['light-gray'], opacity: 0.5 }} />
+                    </div>
+                    <h3 className="text-2xl font-semibold mb-4" style={{ color: colors['light-gray'] }}>No Videos Available</h3>
+                    <p className="text-lg mb-6" style={{ color: colors['light-gray'], opacity: 0.6 }}>
+                      No videos found for this category. Videos will appear here once they are fetched by the ingestion script.
+                    </p>
+                    <div className="text-sm" style={{ color: colors['light-gray'], opacity: 0.5 }}>
+                      <p>Try selecting a different category or subcategory.</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Video Grid */}
+                {!isLoading && !error && videos.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {videos.map((video) => (
+                      <div
+                        key={video.video_id}
+                        onClick={() => setSelectedVideo(video)}
+                        className="rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-0"
+                        style={{ backgroundColor: colors['intermediate-gray'] }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.boxShadow = '0 0 20px rgba(0,255,255,0.3)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.boxShadow = 'none';
+                        }}
+                      >
+                        <div className="aspect-video bg-black relative">
+                          <img
+                            src={video.thumbnail_url}
+                            alt={video.title}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                            <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.8)' }}>
+                              <FaPlay className="w-6 h-6 ml-1" style={{ color: colors['glowing-cyan'] }} />
+                            </div>
                           </div>
                         </div>
+                        <div className="p-4">
+                          <h3 className="font-semibold mb-2 line-clamp-2" style={{ color: colors['light-gray'] }}>
+                            {video.title}
+                          </h3>
+                          <p className="text-sm" style={{ color: colors['light-gray'], opacity: 0.7 }}>
+                            {video.channel_title}
+                          </p>
+                        </div>
                       </div>
-                      <div className="p-4">
-                        <h3 className="font-semibold mb-2 line-clamp-2" style={{ color: colors['light-gray'] }}>
-                          {video.title}
-                        </h3>
-                        <p className="text-sm" style={{ color: colors['light-gray'], opacity: 0.7 }}>
-                          {video.channelTitle}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </main>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </main>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return selectedVideo ? <VideoPlayer /> : <VideoGrid />;
 }
