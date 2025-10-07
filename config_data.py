@@ -63,7 +63,7 @@ MASTER_CHANNEL_LIST = {
     "Philipp Lackner": {"channel_id": "UCKNTZMRHPLXfqlbdOI7mCkg", "channel_handle": "@PhilippLackner"},
     "CodeWithChris": {"channel_id": "UC2D6eRvCeMtcF5OGHf1-trw", "channel_handle": "@CodeWithChris"},
     "Paul Hudson": {"channel_id": "UCmJi5g_2K6D0kcFxJmC4viA", "channel_handle": "@twostraws"},
-    "Bro Code": {"channel_id": "UC29ju8bIqX1iPOyG6CgBwQA", "channel_handle": "@BroCodez"},
+    "Bro Code": {"channel_id": "UCm-J8s_h4_c-kImk1jAk_yQ", "channel_handle": "@BroCodez"},
     "Telusko": {"channel_id": "UC59K-uG2A5ogwIrHw4bmlEg", "channel_handle": "@telusko"},
     "Jason Turner": {"channel_id": "UC_2C-L7-yE-P70k2L29b_1w", "channel_handle": "@JasonTurner-lefticus"},
     "CodeBeauty": {"channel_id": "UCM5_FkG3evj2wDlrW-5g3gQ", "channel_handle": "@CodeBeauty"},
@@ -79,9 +79,9 @@ MASTER_CHANNEL_LIST = {
     "JetBrains TV": {"channel_id": "UC4z99vJg6t0s3g2B4iIqV-g", "channel_handle": "@JetBrainsTV"},
     "Traversy Media": {"channel_id": "UC29ju8bIqX1iPOyG6CgBwQA", "channel_handle": "@TraversyMedia"},
     "No Boilerplate": {"channel_id": "UC2R2d-iSRv114d7c6bYwW2A", "channel_handle": "@NoBoilerplate"},
-    "Ryan Levick": {"channel_id": "UCpeX4D-ArTrsqOKAnA3Fhjg", "channel_handle": "@ryanlevick"},
+    "Ryan Levick": {"channel_id": "UCi39b_aZk-2cQGF0-p-d_XQ", "channel_handle": "@ryanlevick"},
     "Learn To Code": {"channel_id": "UCu-YpQ7PA8I2O00a-bL3X-Q", "channel_handle": "@Learn-to-Code"},
-    "LetsBuildThatApp": {"channel_id": "UCuP2vJ6kRutQBfRmdcI92mA", "channel_handle": "@LetsBuildThatApp"},
+    "LetsBuildThatApp": {"channel_id": "UCuWeq9L43N0cpyP_C3I4J2g", "channel_handle": "@LetsBuildThatApp"},
     "Amigoscode": {"channel_id": "UC2KfmYEM4KCuA1ZurravgYw", "channel_handle": "@amigoscode"},
     "Nic Jackson": {"channel_id": "UCxw2EbkvGCfGKcDu-nGp6Fw", "channel_handle": "@nicjackson"},
     "James Q Quick": {"channel_id": "UC-T8W79DN6PBnzomelvqJYw", "channel_handle": "@JamesQQuick"},
@@ -94,6 +94,7 @@ MASTER_CHANNEL_LIST = {
     "Sentdex": {"channel_id": "UCfzlCWGWYyIQ0aLC5w48gBQ", "channel_handle": "@sentdex"},
     "Lex Fridman": {"channel_id": "UCSHZKyawb77ixDdsGog4iWA", "channel_handle": "@lexfridman"},
     "DeepLearning.AI": {"channel_id": "UCkDaE8uoyJtq06R1n1PC-JQ", "channel_handle": "@Deeplearningai"},
+    "LangChain": {"channel_id": "UCC-d1_n_Kzao-h_u-d_T_Yg", "channel_handle": "@LangChain"},
     
     # Dev Productivity
     "ThePrimeTime": {"channel_id": "UC-0t2-520dpIokw0T5qL-yA", "channel_handle": "@ThePrimeTimeagen"},
@@ -109,10 +110,10 @@ APP_CONFIG = [
     {
         "main_category": "dsa",
         "subcategories": [
-            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "data structures OR algorithms tutorial", "order_param": "viewCount", "is_active": True, "channels": []},
+            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "data structures OR algorithms tutorial", "is_active": True, "channels": []},
             {"name": "Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "data structures OR algorithms", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "Abdul Bari", "CS Dojo", "Back To Back SWE", "WilliamFiset", "Errichto", "AlgoEngine", "Gaurav Sen", "mycodeschool", "Tech With Tim", "Clément Mihailescu", "Nick White", "Joma Tech"]},
-            {"name": "Quick Concepts (Under 20 mins)", "strategy": "FORMAT_DURATION", "search_query": "data structures OR algorithms", "video_duration": "medium", "is_active": True, "channels": []},
-            {"name": "Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "(data structures OR algorithms) masterclass", "video_duration": "long", "is_active": True, "channels": []},
+            {"name": "Quick Concepts (Under 20 mins)", "strategy": "FORMAT_DURATION", "search_query": "data structures OR algorithms", "is_active": True, "channels": []},
+            {"name": "Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "(data structures OR algorithms) masterclass", "is_active": True, "channels": []},
             {"name": "Arrays & Strings", "strategy": "TOPIC_CURATED", "search_query": "(arrays OR strings) AND (data structures OR algorithms)", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "CS Dojo", "Back To Back SWE", "Gaurav Sen", "mycodeschool"]},
             {"name": "Linked Lists", "strategy": "TOPIC_CURATED", "search_query": "'linked lists' AND (data structures OR algorithms)", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "CS Dojo", "mycodeschool"]},
             {"name": "Searching & Sorting", "strategy": "TOPIC_CURATED", "search_query": "(searching OR sorting) AND algorithms", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "CS Dojo", "mycodeschool", "Abdul Bari"]},
@@ -125,9 +126,9 @@ APP_CONFIG = [
     {
         "main_category": "system_design",
         "subcategories": [
-             {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "system design interview", "order_param": "viewCount", "is_active": True, "channels": []},
+             {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "system design interview", "is_active": True, "channels": []},
              {"name": "Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "system design", "is_active": True, "channels": ["ByteByteGo", "Gaurav Sen", "Exponent", "Jordan Has No Life", "Hussein Nasser", "CodeKarle", "InfoQ"]},
-             {"name": "Masterclasses & Deep Dives", "strategy": "FORMAT_KEYWORD", "search_query": "'system design' (masterclass OR 'deep dive' OR course)", "video_duration": "long", "is_active": True, "channels": ["ByteByteGo", "Gaurav Sen", "Hussein Nasser"]},
+             {"name": "Masterclasses & Deep Dives", "strategy": "FORMAT_KEYWORD", "search_query": "'system design' (masterclass OR 'deep dive' OR course)", "is_active": True, "channels": ["ByteByteGo", "Gaurav Sen", "Hussein Nasser"]},
              {"name": "System Design Fundamentals", "strategy": "TOPIC_CURATED", "search_query": "system design fundamentals (scalability OR caching OR database OR 'load balancer')", "is_active": True, "channels": ["ByteByteGo", "Gaurav Sen", "Exponent", "Hussein Nasser", "CodeKarle"]},
              {"name": "Full Mock Interviews", "strategy": "FORMAT_KEYWORD", "search_query": "'system design mock interview'", "is_active": True, "channels": ["Exponent", "Jordan Has No Life", "Gaurav Sen"]},
         ]
@@ -135,7 +136,7 @@ APP_CONFIG = [
     {
         "main_category": "behavioral",
         "subcategories": [
-            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "behavioral interview questions", "order_param": "viewCount", "is_active": True, "channels": []},
+            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "behavioral interview questions", "is_active": True, "channels": []},
             {"name": "Answering with the STAR Method", "strategy": "TOPIC_CURATED", "search_query": "STAR method interview", "is_active": True, "channels": ["Jeff H Sipe", "Dan Croitor", "A Life After Layoff", "Linda Raynier"]},
             {"name": "Teamwork & Conflict", "strategy": "TOPIC_CURATED", "search_query": "behavioral interview teamwork conflict", "is_active": True, "channels": ["Jeff H Sipe", "Dan Croitor", "A Life After Layoff", "Linda Raynier"]},
             {"name": "Amazon's Leadership Principles", "strategy": "TOPIC_CURATED", "search_query": "'amazon leadership principles' interview", "is_active": True, "channels": ["Jeff H Sipe", "Dan Croitor"]},
@@ -145,7 +146,7 @@ APP_CONFIG = [
     {
         "main_category": "dev_productivity",
         "subcategories": [
-            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "developer productivity", "order_param": "viewCount", "is_active": True, "channels": []},
+            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "developer productivity", "is_active": True, "channels": []},
             {"name": "Git & Version Control", "strategy": "TOPIC_CURATED", "search_query": "git tutorial advanced", "is_active": True, "channels": ["Fireship", "freeCodeCamp.org", "ThePrimeTime", "GitKraken"]},
             {"name": "Docker & Containers", "strategy": "TOPIC_CURATED", "search_query": "docker tutorial", "is_active": True, "channels": ["Fireship", "freeCodeCamp.org", "Tech With Tim", "Hussein Nasser", "Docker", "Jeff Geerling"]},
             {"name": "VS Code Tips & Tricks", "strategy": "TOPIC_CURATED", "search_query": "'vs code' tips tricks", "is_active": True, "channels": ["Fireship", "ThePrimeTime", "Theo - t3.gg", "James Q Quick"]},
@@ -154,101 +155,102 @@ APP_CONFIG = [
     {
         "main_category": "ai_ml",
         "subcategories": [
-            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "machine learning introduction", "order_param": "viewCount", "is_active": True, "channels": []},
+            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "machine learning introduction", "is_active": True, "channels": []},
             {"name": "AI & ML Fundamentals", "strategy": "TOPIC_CURATED", "search_query": "machine learning fundamentals", "is_active": True, "channels": ["StatQuest with Josh Starmer", "Two Minute Papers", "Sentdex"]},
             {"name": "Large Language Models (LLMs)", "strategy": "TOPIC_CURATED", "search_query": "large language models explained OR LLM", "is_active": True, "channels": ["Two Minute Papers", "Andrej Karpathy", "Yannic Kilcher", "Lex Fridman"]},
             {"name": "Prompt Engineering", "strategy": "TOPIC_CURATED", "search_query": "prompt engineering tutorial", "is_active": True, "channels": ["Two Minute Papers", "freeCodeCamp.org", "Sentdex"]},
+            {"name": "LangChain", "strategy": "TOPIC_CURATED", "search_query": "langchain tutorial", "is_active": True, "channels": ["freeCodeCamp.org", "Sentdex", "Tech With Tim"]},
+            {"name": "LangGraph", "strategy": "TOPIC_CURATED", "search_query": "langgraph tutorial", "is_active": True, "channels": ["LangChain", "Sentdex"]},
         ]
     },
     {
         "main_category": "language_python",
         "subcategories": [
-            {"name": "Python - Most Watched", "strategy": "POPULARITY", "search_query": "python programming tutorial", "order_param": "viewCount", "is_active": True, "channels": []},
+            {"name": "Python - Most Watched", "strategy": "POPULARITY", "search_query": "python programming tutorial", "is_active": True, "channels": []},
             {"name": "Python - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "python", "is_active": True, "channels": ["Corey Schafer", "freeCodeCamp.org", "Programming with Mosh", "Tech With Tim"]},
-            {"name": "Python - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "python tutorial", "video_duration": "medium", "is_active": True, "channels": []},
-            {"name": "Python - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "python 'full course' OR masterclass", "video_duration": "long", "is_active": True, "channels": []},
+            {"name": "Python - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "python tutorial", "is_active": True, "channels": []},
+            {"name": "Python - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "python 'full course' OR masterclass", "is_active": True, "channels": []},
         ]
     },
     {
         "main_category": "language_javascript",
         "subcategories": [
-            {"name": "JavaScript - Most Watched", "strategy": "POPULARITY", "search_query": "javascript tutorial OR typescript tutorial", "order_param": "viewCount", "is_active": True, "channels": []},
+            {"name": "JavaScript - Most Watched", "strategy": "POPULARITY", "search_query": "javascript tutorial OR typescript tutorial", "is_active": True, "channels": []},
             {"name": "JavaScript - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "javascript OR typescript", "is_active": True, "channels": ["Fireship", "The Net Ninja", "Traversy Media", "Jack Herrington"]},
-            {"name": "JavaScript - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "javascript concepts OR typescript concepts", "video_duration": "medium", "is_active": True, "channels": []},
-            {"name": "JavaScript - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "javascript 'full course' OR typescript masterclass", "video_duration": "long", "is_active": True, "channels": []},
+            {"name": "JavaScript - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "javascript concepts OR typescript concepts", "is_active": True, "channels": []},
+            {"name": "JavaScript - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "javascript 'full course' OR typescript masterclass", "is_active": True, "channels": []},
         ]
     },
     {
         "main_category": "language_java",
         "subcategories": [
-            {"name": "Java - Most Watched", "strategy": "POPULARITY", "search_query": "java programming tutorial", "order_param": "viewCount", "is_active": True, "channels": []},
+            {"name": "Java - Most Watched", "strategy": "POPULARITY", "search_query": "java programming tutorial", "is_active": True, "channels": []},
             {"name": "Java - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "java", "is_active": True, "channels": ["Amigoscode", "Bro Code", "Telusko", "freeCodeCamp.org"]},
-            {"name": "Java - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "java concepts", "video_duration": "medium", "is_active": True, "channels": []},
-            {"name": "Java - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "java 'full course' OR masterclass", "video_duration": "long", "is_active": True, "channels": []},
+            {"name": "Java - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "java concepts", "is_active": True, "channels": []},
+            {"name": "Java - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "java 'full course' OR masterclass", "is_active": True, "channels": []},
         ]
     },
     {
         "main_category": "language_cpp",
         "subcategories": [
-            {"name": "C++ - Most Watched", "strategy": "POPULARITY", "search_query": "c++ programming tutorial", "order_param": "viewCount", "is_active": True, "channels": []},
+            {"name": "C++ - Most Watched", "strategy": "POPULARITY", "search_query": "c++ programming tutorial", "is_active": True, "channels": []},
             {"name": "C++ - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "c++", "is_active": True, "channels": ["The Cherno", "CodeBeauty", "Jason Turner", "freeCodeCamp.org"]},
-            {"name": "C++ - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "c++ concepts", "video_duration": "medium", "is_active": True, "channels": []},
-            {"name": "C++ - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "c++ 'full course' OR masterclass", "video_duration": "long", "is_active": True, "channels": []},
+            {"name": "C++ - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "c++ concepts", "is_active": True, "channels": []},
+            {"name": "C++ - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "c++ 'full course' OR masterclass", "is_active": True, "channels": []},
         ]
     },
     {
         "main_category": "language_csharp",
         "subcategories": [
-            {"name": "C# - Most Watched", "strategy": "POPULARITY", "search_query": "c# programming tutorial", "order_param": "viewCount", "is_active": True, "channels": []},
+            {"name": "C# - Most Watched", "strategy": "POPULARITY", "search_query": "c# programming tutorial", "is_active": True, "channels": []},
             {"name": "C# - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "c#", "is_active": True, "channels": ["IAmTimCorey", "Nick Chapsas", "Programming with Mosh", "freeCodeCamp.org"]},
-            {"name": "C# - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "c# concepts", "video_duration": "medium", "is_active": True, "channels": []},
-            {"name": "C# - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "c# 'full course' OR masterclass", "video_duration": "long", "is_active": True, "channels": []},
+            {"name": "C# - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "c# concepts", "is_active": True, "channels": []},
+            {"name": "C# - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "c# 'full course' OR masterclass", "is_active": True, "channels": []},
         ]
     },
     {
         "main_category": "language_go",
         "subcategories": [
-            {"name": "Go - Most Watched", "strategy": "POPULARITY", "search_query": "golang tutorial", "order_param": "viewCount", "is_active": True, "channels": []},
+            {"name": "Go - Most Watched", "strategy": "POPULARITY", "search_query": "golang tutorial", "is_active": True, "channels": []},
             {"name": "Go - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "golang", "is_active": True, "channels": ["Nic Jackson", "JustForFunc", "Anthony GG", "Learn To Code"]},
-            {"name": "Go - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "golang concepts", "video_duration": "medium", "is_active": True, "channels": []},
-            {"name": "Go - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "golang 'full course' OR masterclass", "video_duration": "long", "is_active": True, "channels": []},
+            {"name": "Go - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "golang concepts", "is_active": True, "channels": []},
+            {"name": "Go - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "golang 'full course' OR masterclass", "is_active": True, "channels": []},
         ]
     },
     {
         "main_category": "language_rust",
         "subcategories": [
-            {"name": "Rust - Most Watched", "strategy": "POPULARITY", "search_query": "rust programming tutorial", "order_param": "viewCount", "is_active": True, "channels": []},
+            {"name": "Rust - Most Watched", "strategy": "POPULARITY", "search_query": "rust programming tutorial", "is_active": True, "channels": []},
             {"name": "Rust - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "rust", "is_active": True, "channels": ["Let's Get Rusty", "No Boilerplate", "Ryan Levick", "freeCodeCamp.org"]},
-            {"name": "Rust - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "rust concepts", "video_duration": "medium", "is_active": True, "channels": []},
-            {"name": "Rust - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "rust 'full course' OR masterclass", "video_duration": "long", "is_active": True, "channels": []},
+            {"name": "Rust - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "rust concepts", "is_active": True, "channels": []},
+            {"name": "Rust - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "rust 'full course' OR masterclass", "is_active": True, "channels": []},
         ]
     },
     {
         "main_category": "language_sql",
         "subcategories": [
-            {"name": "SQL - Most Watched", "strategy": "POPULARITY", "search_query": "sql tutorial for beginners", "order_param": "viewCount", "is_active": True, "channels": []},
+            {"name": "SQL - Most Watched", "strategy": "POPULARITY", "search_query": "sql tutorial for beginners", "is_active": True, "channels": []},
             {"name": "SQL - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "sql", "is_active": True, "channels": ["Alex The Analyst", "kudvenkat", "Programming with Mosh", "freeCodeCamp.org"]},
-            {"name": "SQL - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "sql concepts", "video_duration": "medium", "is_active": True, "channels": []},
-            {"name": "SQL - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "sql 'full course' OR masterclass", "video_duration": "long", "is_active": True, "channels": []},
+            {"name": "SQL - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "sql concepts", "is_active": True, "channels": []},
+            {"name": "SQL - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "sql 'full course' OR masterclass", "is_active": True, "channels": []},
         ]
     },
     {
         "main_category": "language_kotlin",
         "subcategories": [
-            {"name": "Kotlin - Most Watched", "strategy": "POPULARITY", "search_query": "kotlin tutorial", "order_param": "viewCount", "is_active": True, "channels": []},
+            {"name": "Kotlin - Most Watched", "strategy": "POPULARITY", "search_query": "kotlin tutorial", "is_active": True, "channels": []},
             {"name": "Kotlin - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "kotlin", "is_active": True, "channels": ["Philipp Lackner", "CodingWithMitch", "freeCodeCamp.org", "JetBrains TV"]},
-            {"name": "Kotlin - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "kotlin concepts", "video_duration": "medium", "is_active": True, "channels": []},
-            {"name": "Kotlin - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "kotlin 'full course' OR masterclass", "video_duration": "long", "is_active": True, "channels": []},
+            {"name": "Kotlin - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "kotlin concepts", "is_active": True, "channels": []},
+            {"name": "Kotlin - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "kotlin 'full course' OR masterclass", "is_active": True, "channels": []},
         ]
     },
     {
         "main_category": "language_swift",
         "subcategories": [
-            {"name": "Swift - Most Watched", "strategy": "POPULARITY", "search_query": "swift programming tutorial", "order_param": "viewCount", "is_active": True, "channels": []},
+            {"name": "Swift - Most Watched", "strategy": "POPULARITY", "search_query": "swift programming tutorial", "is_active": True, "channels": []},
             {"name": "Swift - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "swift", "is_active": True, "channels": ["CodeWithChris", "Sean Allen", "LetsBuildThatApp", "Paul Hudson"]},
-            {"name": "Swift - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "swift concepts", "video_duration": "medium", "is_active": True, "channels": []},
-            {"name": "Swift - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "swift 'full course' OR masterclass", "video_duration": "long", "is_active": True, "channels": []},
+            {"name": "Swift - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "swift concepts", "is_active": True, "channels": []},
+            {"name": "Swift - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "swift 'full course' OR masterclass", "is_active": True, "channels": []},
         ]
     },
 ]
-
