@@ -49,8 +49,8 @@ YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
 SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 
-# TEMPORARY TESTING FLAG - Set to None to process all, or a number to limit
-TEST_LIMIT = 3  # Only process first 3 subcategories for testing
+# Process all subcategories
+TEST_LIMIT = None  # Set to a number (e.g., 3) to limit processing for testing
 
 # Validate environment variables
 if not YOUTUBE_API_KEY:
@@ -202,7 +202,7 @@ def get_video_details(video_ids: List[str]) -> List[Dict[str, Any]]:
             batch = video_ids[i:i+50]
             
             response = youtube.videos().list(
-                part='snippet',  # Only need snippet, not statistics or contentDetails
+                part='snippet,statistics,contentDetails',  # Include all data: snippet, statistics, and contentDetails
                 id=','.join(batch)
             ).execute()
             
@@ -265,6 +265,21 @@ def format_video_for_database(video: Dict[str, Any], subcategory_id: int, catego
         Dictionary ready for database insertion
     """
     snippet = video.get('snippet', {})
+    statistics = video.get('statistics', {})
+    content_details = video.get('contentDetails', {})
+    
+    # Parse numeric fields as integers, default to None if not available
+    view_count = statistics.get('viewCount')
+    view_count_int = int(view_count) if view_count else None
+    
+    like_count = statistics.get('likeCount')
+    like_count_int = int(like_count) if like_count else None
+    
+    # Duration is in ISO 8601 format (PT4M13S = 4 minutes 13 seconds)
+    duration = content_details.get('duration')
+    
+    # Tags as a list
+    tags = snippet.get('tags', [])
     
     return {
         'video_id': video['id'],
@@ -274,7 +289,11 @@ def format_video_for_database(video: Dict[str, Any], subcategory_id: int, catego
         'description': snippet.get('description', '')[:500],  # Truncate to 500 chars
         'channel_title': snippet.get('channelTitle', 'Unknown Channel'),  # NOT NULL - required!
         'published_at': snippet.get('publishedAt'),
-        'thumbnail_url': snippet.get('thumbnails', {}).get('high', {}).get('url', '')
+        'thumbnail_url': snippet.get('thumbnails', {}).get('high', {}).get('url', ''),
+        'view_count': view_count_int,
+        'like_count': like_count_int,
+        'duration': duration,
+        'tags': tags
     }
 
 
@@ -357,10 +376,10 @@ def process_subcategory(subcategory: Dict[str, Any]) -> int:
         )
         
     elif strategy == 'POPULARITY':
-        # Search across all of YouTube by popularity metric
+        # Search across all of YouTube by popularity metric (view count)
         video_ids = search_youtube_videos(
             query=search_query,
-            order=order_param,  # 'viewCount' or 'rating'
+            order='viewCount',  # Always order by view count for popularity
             max_results=max_results
         )
         
@@ -404,6 +423,24 @@ def process_subcategory(subcategory: Dict[str, Any]) -> int:
         video_ids = search_youtube_videos(
             query=search_query,
             order='relevance',
+            max_results=max_results
+        )
+        
+    elif strategy == 'POPULARITY_CURATED':
+        # Fetch popular videos from curated channels, ordered by view count
+        channel_handles = get_channel_handles_for_subcategory(subcat_id)
+        
+        if not channel_handles:
+            print("   ⚠ No curated channels found for this subcategory, skipping...")
+            return 0
+        
+        # Build query with channel handles, ordered by view count for popularity
+        channel_part = ' OR '.join(channel_handles)
+        combined_query = f"{search_query} AND ({channel_part})" if search_query else f"({channel_part})"
+        
+        video_ids = search_youtube_videos(
+            query=combined_query,
+            order='viewCount',  # Order by view count for most popular
             max_results=max_results
         )
         

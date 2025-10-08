@@ -110,7 +110,7 @@ APP_CONFIG = [
     {
         "main_category": "dsa",
         "subcategories": [
-            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "data structures OR algorithms tutorial", "is_active": True, "channels": []},
+            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "data structures algorithms tutorial course", "is_active": True, "channels": []},
             {"name": "Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "data structures OR algorithms", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "Abdul Bari", "CS Dojo", "Back To Back SWE", "WilliamFiset", "Errichto", "AlgoEngine", "Gaurav Sen", "mycodeschool", "Tech With Tim", "Clément Mihailescu", "Nick White", "Joma Tech"]},
             {"name": "Quick Concepts (Under 20 mins)", "strategy": "FORMAT_DURATION", "search_query": "data structures OR algorithms", "is_active": True, "channels": []},
             {"name": "Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "(data structures OR algorithms) masterclass", "is_active": True, "channels": []},

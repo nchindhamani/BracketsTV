@@ -1,8 +1,9 @@
 # Node modules
 /frontend/node_modules
 
-# Python virtual environment
+# Python virtual environments
 .venv
+/api/.venv
 
 # Environment variables
 .env

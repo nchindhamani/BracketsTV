@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaCode, FaCogs, FaUserTie, FaCodeBranch, FaPlay, FaArrowLeft, FaExternalLinkAlt, FaPython, FaJs, FaJava, FaRust, FaDatabase } from 'react-icons/fa';
+import { FaCode, FaCogs, FaUserTie, FaCodeBranch, FaPlay, FaArrowLeft, FaExternalLinkAlt, FaPython, FaJs, FaJava, FaRust, FaDatabase, FaTools, FaRobot } from 'react-icons/fa';
 import { DiGo, DiSwift } from 'react-icons/di';
 import './App.css';
 
@@ -13,7 +13,7 @@ const colors = {
 };
 
 // API base URL
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'http://127.0.0.1:8001';
 
 // Custom TextIcon component for languages without specific icons
 const TextIcon = ({ name }) => (
@@ -21,6 +21,45 @@ const TextIcon = ({ name }) => (
     <span className="text-xs font-bold font-mono" style={{ color: '#00FFFF' }}>{name}</span>
   </div>
 );
+
+// Helper function to format time since upload
+const formatTimeAgo = (publishedAt) => {
+  if (!publishedAt) return '';
+  
+  const now = new Date();
+  const published = new Date(publishedAt);
+  const diffInMs = now - published;
+  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+  const diffInDays = Math.floor(diffInHours / 24);
+  const diffInWeeks = Math.floor(diffInDays / 7);
+  const diffInMonths = Math.floor(diffInDays / 30);
+  const diffInYears = Math.floor(diffInDays / 365);
+
+  if (diffInHours < 24) {
+    return `${diffInHours} hour${diffInHours !== 1 ? 's' : ''} ago`;
+  } else if (diffInDays < 7) {
+    return `${diffInDays} day${diffInDays !== 1 ? 's' : ''} ago`;
+  } else if (diffInWeeks < 4) {
+    return `${diffInWeeks} week${diffInWeeks !== 1 ? 's' : ''} ago`;
+  } else if (diffInMonths < 12) {
+    return `${diffInMonths} month${diffInMonths !== 1 ? 's' : ''} ago`;
+  } else {
+    return `${diffInYears} year${diffInYears !== 1 ? 's' : ''} ago`;
+  }
+};
+
+// Helper function to format view count
+const formatViewCount = (viewCount) => {
+  if (!viewCount || viewCount === 0) return '';
+  
+  if (viewCount >= 1000000) {
+    return `${(viewCount / 1000000).toFixed(1)}M views`;
+  } else if (viewCount >= 1000) {
+    return `${(viewCount / 1000).toFixed(1)}k views`;
+  } else {
+    return `${viewCount} views`;
+  }
+};
 
 // Navigation categories (static - these are the main categories)
 const categories = [
@@ -41,6 +80,18 @@ const categories = [
     path: 'behavioral',
     icon: <FaUserTie className="w-4 h-4" />,
     description: 'Prepare for behavioral interviews'
+  },
+  {
+    name: 'Developer Productivity & Tools',
+    path: 'dev_productivity',
+    icon: <FaTools className="w-4 h-4" />,
+    description: 'Boost your development workflow and tooling'
+  },
+  {
+    name: 'AI & Machine Learning',
+    path: 'ai_ml',
+    icon: <FaRobot className="w-4 h-4" />,
+    description: 'Explore artificial intelligence and ML concepts'
   },
   {
     name: 'Language-Specific Prep',
@@ -462,9 +513,21 @@ function App() {
                           <h3 className="font-semibold mb-2 line-clamp-2" style={{ color: colors['light-gray'] }}>
                             {video.title}
                           </h3>
-                          <p className="text-sm" style={{ color: colors['light-gray'], opacity: 0.7 }}>
-                            {video.channel_title}
-                          </p>
+                          <div className="flex items-center text-sm" style={{ color: colors['light-gray'], opacity: 0.7 }}>
+                            <span>{video.channel_title}</span>
+                            {video.view_count && (
+                              <>
+                                <span className="mx-1">•</span>
+                                <span>{formatViewCount(video.view_count)}</span>
+                              </>
+                            )}
+                            {video.published_at && (
+                              <>
+                                <span className="mx-1">•</span>
+                                <span>{formatTimeAgo(video.published_at)}</span>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
                     ))}

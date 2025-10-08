@@ -143,14 +143,19 @@ async def get_videos(category: Optional[str], subcategory: Optional[str]) -> Lis
         raise HTTPException(status_code=400, detail="Subcategory parameter is required for videos")
     
     try:
-        # Query videos table
-        response = supabase.table('videos')\
+        # Query videos table with dynamic ordering based on subcategory
+        query = supabase.table('videos')\
             .select('*')\
             .eq('category', category)\
-            .eq('sub_category', subcategory)\
-            .order('published_at', desc=True)\
-            .limit(50)\
-            .execute()
+            .eq('sub_category', subcategory)
+        
+        # Order by view_count for "Most Watched" subcategories, otherwise by published_at
+        if subcategory == "Most Watched":
+            query = query.order('view_count', desc=True)
+        else:
+            query = query.order('published_at', desc=True)
+            
+        response = query.limit(50).execute()
         
         if not response.data:
             print(f"⚠️  No videos found for category '{category}' and subcategory '{subcategory}'")
