@@ -251,13 +251,15 @@ def parse_duration_to_seconds(duration: str) -> int:
     return hours * 3600 + minutes * 60 + seconds
 
 
-def format_video_for_database(video: Dict[str, Any], subcategory_id: int) -> Dict[str, Any]:
+def format_video_for_database(video: Dict[str, Any], subcategory_id: int, category: str, subcategory: str) -> Dict[str, Any]:
     """
     Format a YouTube video object into a dictionary matching our videos table schema.
     
     Args:
         video: YouTube video resource from videos.list()
         subcategory_id: The subcategory this video belongs to (not currently used by schema)
+        category: Main category (e.g., 'dsa', 'system_design') - NOT NULL in DB
+        subcategory: Subcategory name (e.g., 'Most Watched')
         
     Returns:
         Dictionary ready for database insertion
@@ -266,6 +268,8 @@ def format_video_for_database(video: Dict[str, Any], subcategory_id: int) -> Dic
     
     return {
         'video_id': video['id'],
+        'category': category,  # NOT NULL - required!
+        'subcategory': subcategory,
         'title': snippet.get('title', 'Untitled'),
         'description': snippet.get('description', '')[:500],  # Truncate to 500 chars
         'channel_title': snippet.get('channelTitle', 'Unknown Channel'),  # NOT NULL - required!
@@ -421,7 +425,7 @@ def process_subcategory(subcategory: Dict[str, Any]) -> int:
     
     # Format videos for database
     formatted_videos = [
-        format_video_for_database(video, subcat_id) 
+        format_video_for_database(video, subcat_id, category, subcat_name) 
         for video in video_details
     ]
     
