@@ -257,7 +257,7 @@ def format_video_for_database(video: Dict[str, Any], subcategory_id: int) -> Dic
     
     Args:
         video: YouTube video resource from videos.list()
-        subcategory_id: The subcategory this video belongs to
+        subcategory_id: The subcategory this video belongs to (not currently used by schema)
         
     Returns:
         Dictionary ready for database insertion
@@ -266,10 +266,9 @@ def format_video_for_database(video: Dict[str, Any], subcategory_id: int) -> Dic
     
     return {
         'video_id': video['id'],
-        'subcategory_id': subcategory_id,
-        'title': snippet.get('title', ''),
+        'title': snippet.get('title', 'Untitled'),
         'description': snippet.get('description', '')[:500],  # Truncate to 500 chars
-        'channel_title': snippet.get('channelTitle', ''),
+        'channel_title': snippet.get('channelTitle', 'Unknown Channel'),  # NOT NULL - required!
         'published_at': snippet.get('publishedAt'),
         'thumbnail_url': snippet.get('thumbnails', {}).get('high', {}).get('url', '')
     }
