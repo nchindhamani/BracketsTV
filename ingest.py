@@ -49,6 +49,9 @@ YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
 SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 
+# TEMPORARY TESTING FLAG - Set to None to process all, or a number to limit
+TEST_LIMIT = 3  # Only process first 3 subcategories for testing
+
 # Validate environment variables
 if not YOUTUBE_API_KEY:
     print("ERROR: YOUTUBE_API_KEY not found in environment variables")
@@ -452,16 +455,22 @@ def main():
             print("\n⚠ No subcategories found in database. Exiting.")
             return
         
-        # Step 2: Process each subcategory
-        for idx, subcategory in enumerate(subcategories, 1):
-            print(f"\n[{idx}/{len(subcategories)}]", end=' ')
+        # Step 2: Process each subcategory (with optional test limit)
+        subcategories_to_process = subcategories[:TEST_LIMIT] if TEST_LIMIT else subcategories
+        total_subcategories = len(subcategories)
+        limit_message = f" (TESTING: limited to first {TEST_LIMIT})" if TEST_LIMIT else ""
+        
+        print(f"\n📊 Processing {len(subcategories_to_process)}/{total_subcategories} subcategories{limit_message}")
+        
+        for idx, subcategory in enumerate(subcategories_to_process, 1):
+            print(f"\n[{idx}/{len(subcategories_to_process)}]", end=' ')
             
             try:
                 videos_saved = process_subcategory(subcategory)
                 total_videos_saved += videos_saved
                 
                 # Rate limiting: sleep between subcategories to avoid API throttling
-                if idx < len(subcategories):
+                if idx < len(subcategories_to_process):
                     time.sleep(1)
                     
             except Exception as e:
