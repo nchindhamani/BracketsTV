@@ -26,16 +26,22 @@ try:
         print(f"   Columns in 'videos' table: {list(response.data[0].keys())}")
     else:
         print("   ⚠ Table is empty, trying to insert a test row to see required columns...")
-        # Try inserting a minimal test row
+        # Try inserting with all likely fields based on frontend usage
         test_video = {
             'video_id': 'TEST123',
-            'title': 'Test Video'
+            'title': 'Test Video',
+            'description': 'Test description',
+            'channel_title': 'Test Channel',
+            'published_at': '2025-01-01T00:00:00Z',
+            'thumbnail_url': 'https://example.com/test.jpg'
         }
         try:
-            supabase.table('videos').insert(test_video).execute()
-            print("   ✓ Test insert succeeded with: video_id, title")
+            result = supabase.table('videos').insert(test_video).execute()
+            print("   ✓ Test insert succeeded!")
+            print(f"   Inserted row: {result.data[0]}")
             # Clean up
             supabase.table('videos').delete().eq('video_id', 'TEST123').execute()
+            print("   ✓ Test row deleted")
         except Exception as e:
             print(f"   Error: {e}")
 except Exception as e:
