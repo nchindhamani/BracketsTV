@@ -100,7 +100,8 @@ def seed_subcategories():
                     'name': subcat['name'],
                     'strategy': subcat['strategy'],
                     'search_query': subcat.get('search_query', ''),
-                    'is_active': subcat.get('is_active', True)
+                    'is_active': subcat.get('is_active', True),
+                    'display_order': subcat.get('display_order', 999)  # Add display_order with default 999
                 })
         
         if subcategories_to_seed:

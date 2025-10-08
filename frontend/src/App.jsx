@@ -356,7 +356,7 @@ function App() {
             <div className="p-6">
               <div className="mb-8">
                 <h1 className="text-2xl font-bold mb-2" style={{ color: colors['glowing-cyan'] }}>
-                  BracketsTV
+                  TechieTV
                 </h1>
                 <p className="text-sm" style={{ color: colors['light-gray'], opacity: 0.6 }}>
                   Curated Interview Prep

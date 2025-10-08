@@ -98,17 +98,18 @@ async def get_subcategories(category: Optional[str]) -> List[str]:
         category: The main category (e.g., 'dsa', 'system_design')
     
     Returns:
-        List of subcategory names
+        List of subcategory names ordered by display_order
     """
     if not category:
         raise HTTPException(status_code=400, detail="Category parameter is required for subcategories")
     
     try:
-        # Query subcategories table
+        # Query subcategories table ordered by display_order
         response = supabase.table('subcategories')\
             .select('name')\
             .eq('main_category', category)\
             .eq('is_active', True)\
+            .order('display_order', desc=False)\
             .execute()
         
         if not response.data:

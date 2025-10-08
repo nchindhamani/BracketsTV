@@ -110,157 +110,157 @@ APP_CONFIG = [
     {
         "main_category": "dsa",
         "subcategories": [
-            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "data structures algorithms explained interview", "is_active": True, "channels": []},
-            {"name": "Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "data structures OR algorithms", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "Abdul Bari", "CS Dojo", "Back To Back SWE", "WilliamFiset", "Errichto", "AlgoEngine", "Gaurav Sen", "mycodeschool", "Tech With Tim", "Clément Mihailescu", "Nick White", "Joma Tech"]},
-            {"name": "Quick Concepts (Under 20 mins)", "strategy": "FORMAT_DURATION", "search_query": "data structures OR algorithms", "is_active": True, "channels": []},
-            {"name": "Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "data structures algorithms full course tutorial OR data structures masterclass series OR algorithms complete course", "is_active": True, "channels": []},
-            {"name": "Arrays & Strings", "strategy": "TOPIC_CURATED", "search_query": "(arrays OR strings) AND (data structures OR algorithms)", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "CS Dojo", "Back To Back SWE", "Gaurav Sen", "mycodeschool"]},
-            {"name": "Linked Lists", "strategy": "TOPIC_CURATED", "search_query": "'linked lists' AND (data structures OR algorithms)", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "CS Dojo", "mycodeschool"]},
-            {"name": "Searching & Sorting", "strategy": "TOPIC_CURATED", "search_query": "(searching OR sorting) AND algorithms", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "CS Dojo", "mycodeschool", "Abdul Bari"]},
-            {"name": "Trees & Graphs", "strategy": "TOPIC_CURATED", "search_query": "(trees OR graphs) AND (data structures OR algorithms)", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "CS Dojo", "Back To Back SWE", "WilliamFiset", "Abdul Bari"]},
-            {"name": "Heaps & Tries", "strategy": "TOPIC_CURATED", "search_query": "(heaps OR tries OR 'priority queue') AND (data structures OR algorithms)", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "WilliamFiset", "Abdul Bari"]},
-            {"name": "Dynamic Programming", "strategy": "TOPIC_CURATED", "search_query": "'dynamic programming' AND algorithms", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "CS Dojo", "Back To Back SWE", "Errichto"]},
-            {"name": "Backtracking", "strategy": "TOPIC_CURATED", "search_query": "backtracking AND algorithms", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "Back To Back SWE"]},
+            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "data structures algorithms explained interview", "is_active": True, "channels": [], "display_order": 1},
+            {"name": "Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "data structures OR algorithms", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "Abdul Bari", "CS Dojo", "Back To Back SWE", "WilliamFiset", "Errichto", "AlgoEngine", "Gaurav Sen", "mycodeschool", "Tech With Tim", "Clément Mihailescu", "Nick White", "Joma Tech"], "display_order": 2},
+            {"name": "Quick Concepts (Under 20 mins)", "strategy": "FORMAT_DURATION", "search_query": "data structures OR algorithms", "is_active": True, "channels": [], "display_order": 3},
+            {"name": "Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "data structures algorithms full course tutorial OR data structures masterclass series OR algorithms complete course", "is_active": True, "channels": [], "display_order": 4},
+            {"name": "Arrays & Strings", "strategy": "TOPIC_CURATED", "search_query": "(arrays OR strings) AND (data structures OR algorithms)", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "CS Dojo", "Back To Back SWE", "Gaurav Sen", "mycodeschool"], "display_order": 10},
+            {"name": "Linked Lists", "strategy": "TOPIC_CURATED", "search_query": "'linked lists' AND (data structures OR algorithms)", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "CS Dojo", "mycodeschool"], "display_order": 11},
+            {"name": "Searching & Sorting", "strategy": "TOPIC_CURATED", "search_query": "(searching OR sorting) AND algorithms", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "CS Dojo", "mycodeschool", "Abdul Bari"], "display_order": 12},
+            {"name": "Trees & Graphs", "strategy": "TOPIC_CURATED", "search_query": "(trees OR graphs) AND (data structures OR algorithms)", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "CS Dojo", "Back To Back SWE", "WilliamFiset", "Abdul Bari"], "display_order": 13},
+            {"name": "Heaps & Tries", "strategy": "TOPIC_CURATED", "search_query": "(heaps OR tries OR 'priority queue') AND (data structures OR algorithms)", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "WilliamFiset", "Abdul Bari"], "display_order": 14},
+            {"name": "Dynamic Programming", "strategy": "TOPIC_CURATED", "search_query": "'dynamic programming' AND algorithms", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "CS Dojo", "Back To Back SWE", "Errichto"], "display_order": 15},
+            {"name": "Backtracking", "strategy": "TOPIC_CURATED", "search_query": "backtracking AND algorithms", "is_active": True, "channels": ["NeetCode", "freeCodeCamp.org", "Back To Back SWE"], "display_order": 16},
         ]
     },
     {
         "main_category": "system_design",
         "subcategories": [
-             {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "system design explained interview", "is_active": True, "channels": []},
-             {"name": "Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "system design", "is_active": True, "channels": ["ByteByteGo", "Gaurav Sen", "Exponent", "Jordan Has No Life", "Hussein Nasser", "CodeKarle", "InfoQ"]},
-             {"name": "Masterclasses & Deep Dives", "strategy": "FORMAT_KEYWORD", "search_query": "system design full course tutorial OR system design masterclass series OR system design complete course", "is_active": True, "channels": ["ByteByteGo", "Gaurav Sen", "Hussein Nasser"]},
-             {"name": "System Design Fundamentals", "strategy": "TOPIC_CURATED", "search_query": "system design fundamentals (scalability OR caching OR database OR 'load balancer')", "is_active": True, "channels": ["ByteByteGo", "Gaurav Sen", "Exponent", "Hussein Nasser", "CodeKarle"]},
-             {"name": "Full Mock Interviews", "strategy": "FORMAT_KEYWORD", "search_query": "'system design mock interview'", "is_active": True, "channels": ["Exponent", "Jordan Has No Life", "Gaurav Sen"]},
+             {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "system design explained interview", "is_active": True, "channels": [], "display_order": 1},
+             {"name": "Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "system design", "is_active": True, "channels": ["ByteByteGo", "Gaurav Sen", "Exponent", "Jordan Has No Life", "Hussein Nasser", "CodeKarle", "InfoQ"], "display_order": 2},
+             {"name": "Masterclasses & Deep Dives", "strategy": "FORMAT_KEYWORD", "search_query": "system design full course tutorial OR system design masterclass series OR system design complete course", "is_active": True, "channels": ["ByteByteGo", "Gaurav Sen", "Hussein Nasser"], "display_order": 4},
+             {"name": "System Design Fundamentals", "strategy": "TOPIC_CURATED", "search_query": "system design fundamentals (scalability OR caching OR database OR 'load balancer')", "is_active": True, "channels": ["ByteByteGo", "Gaurav Sen", "Exponent", "Hussein Nasser", "CodeKarle"], "display_order": 10},
+             {"name": "Full Mock Interviews", "strategy": "FORMAT_KEYWORD", "search_query": "'system design mock interview'", "is_active": True, "channels": ["Exponent", "Jordan Has No Life", "Gaurav Sen"], "display_order": 11},
         ]
     },
     {
         "main_category": "behavioral",
         "subcategories": [
-            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "behavioral interview questions explained", "is_active": True, "channels": []},
-            {"name": "Answering with the STAR Method", "strategy": "TOPIC_CURATED", "search_query": "STAR method interview", "is_active": True, "channels": ["Jeff H Sipe", "Dan Croitor", "A Life After Layoff", "Linda Raynier"]},
-            {"name": "Teamwork & Conflict", "strategy": "TOPIC_CURATED", "search_query": "behavioral interview teamwork conflict", "is_active": True, "channels": ["Jeff H Sipe", "Dan Croitor", "A Life After Layoff", "Linda Raynier"]},
-            {"name": "Amazon's Leadership Principles", "strategy": "TOPIC_CURATED", "search_query": "'amazon leadership principles' interview", "is_active": True, "channels": ["Jeff H Sipe", "Dan Croitor"]},
-            {"name": "Google's 'Googliness'", "strategy": "TOPIC_CURATED", "search_query": "google 'googliness' interview", "is_active": True, "channels": ["Exponent", "Dan Croitor"]},
+            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "behavioral interview questions explained", "is_active": True, "channels": [], "display_order": 1},
+            {"name": "Answering with the STAR Method", "strategy": "TOPIC_CURATED", "search_query": "STAR method interview", "is_active": True, "channels": ["Jeff H Sipe", "Dan Croitor", "A Life After Layoff", "Linda Raynier"], "display_order": 10},
+            {"name": "Teamwork & Conflict", "strategy": "TOPIC_CURATED", "search_query": "behavioral interview teamwork conflict", "is_active": True, "channels": ["Jeff H Sipe", "Dan Croitor", "A Life After Layoff", "Linda Raynier"], "display_order": 11},
+            {"name": "Amazon's Leadership Principles", "strategy": "TOPIC_CURATED", "search_query": "'amazon leadership principles' interview", "is_active": True, "channels": ["Jeff H Sipe", "Dan Croitor"], "display_order": 12},
+            {"name": "Google's 'Googliness'", "strategy": "TOPIC_CURATED", "search_query": "google 'googliness' interview", "is_active": True, "channels": ["Exponent", "Dan Croitor"], "display_order": 13},
         ]
     },
     {
         "main_category": "dev_productivity",
         "subcategories": [
-            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "developer productivity tools explained", "is_active": True, "channels": []},
-            {"name": "Git & Version Control", "strategy": "TOPIC_CURATED", "search_query": "git tutorial advanced", "is_active": True, "channels": ["Fireship", "freeCodeCamp.org", "ThePrimeTime", "GitKraken"]},
-            {"name": "Docker & Containers", "strategy": "TOPIC_CURATED", "search_query": "docker tutorial", "is_active": True, "channels": ["Fireship", "freeCodeCamp.org", "Tech With Tim", "Hussein Nasser", "Docker", "Jeff Geerling"]},
-            {"name": "VS Code Tips & Tricks", "strategy": "TOPIC_CURATED", "search_query": "'vs code' tips tricks", "is_active": True, "channels": ["Fireship", "ThePrimeTime", "Theo - t3.gg", "James Q Quick"]},
+            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "developer productivity tools explained", "is_active": True, "channels": [], "display_order": 1},
+            {"name": "Git & Version Control", "strategy": "TOPIC_CURATED", "search_query": "git tutorial advanced", "is_active": True, "channels": ["Fireship", "freeCodeCamp.org", "ThePrimeTime", "GitKraken"], "display_order": 10},
+            {"name": "Docker & Containers", "strategy": "TOPIC_CURATED", "search_query": "docker tutorial", "is_active": True, "channels": ["Fireship", "freeCodeCamp.org", "Tech With Tim", "Hussein Nasser", "Docker", "Jeff Geerling"], "display_order": 11},
+            {"name": "VS Code Tips & Tricks", "strategy": "TOPIC_CURATED", "search_query": "'vs code' tips tricks", "is_active": True, "channels": ["Fireship", "ThePrimeTime", "Theo - t3.gg", "James Q Quick"], "display_order": 12},
         ]
     },
     {
         "main_category": "ai_ml",
         "subcategories": [
-            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "machine learning explained tutorial", "is_active": True, "channels": []},
-            {"name": "AI & ML Fundamentals", "strategy": "TOPIC_CURATED", "search_query": "machine learning fundamentals", "is_active": True, "channels": ["StatQuest with Josh Starmer", "Two Minute Papers", "Sentdex"]},
-            {"name": "Large Language Models (LLMs)", "strategy": "TOPIC_CURATED", "search_query": "large language models explained OR LLM", "is_active": True, "channels": ["Two Minute Papers", "Andrej Karpathy", "Yannic Kilcher", "Lex Fridman"]},
-            {"name": "Prompt Engineering", "strategy": "TOPIC_CURATED", "search_query": "prompt engineering tutorial", "is_active": True, "channels": ["Two Minute Papers", "freeCodeCamp.org", "Sentdex"]},
-            {"name": "LangChain", "strategy": "TOPIC_CURATED", "search_query": "langchain tutorial", "is_active": True, "channels": ["freeCodeCamp.org", "Sentdex", "Tech With Tim"]},
-            {"name": "LangGraph", "strategy": "TOPIC_CURATED", "search_query": "langgraph tutorial", "is_active": True, "channels": ["LangChain", "Sentdex"]},
+            {"name": "Most Watched", "strategy": "POPULARITY", "search_query": "machine learning explained tutorial", "is_active": True, "channels": [], "display_order": 1},
+            {"name": "AI & ML Fundamentals", "strategy": "TOPIC_CURATED", "search_query": "machine learning fundamentals", "is_active": True, "channels": ["StatQuest with Josh Starmer", "Two Minute Papers", "Sentdex"], "display_order": 10},
+            {"name": "Large Language Models (LLMs)", "strategy": "TOPIC_CURATED", "search_query": "large language models explained OR LLM", "is_active": True, "channels": ["Two Minute Papers", "Andrej Karpathy", "Yannic Kilcher", "Lex Fridman"], "display_order": 11},
+            {"name": "Prompt Engineering", "strategy": "TOPIC_CURATED", "search_query": "prompt engineering tutorial", "is_active": True, "channels": ["Two Minute Papers", "freeCodeCamp.org", "Sentdex"], "display_order": 12},
+            {"name": "LangChain", "strategy": "TOPIC_CURATED", "search_query": "langchain tutorial", "is_active": True, "channels": ["freeCodeCamp.org", "Sentdex", "Tech With Tim"], "display_order": 13},
+            {"name": "LangGraph", "strategy": "TOPIC_CURATED", "search_query": "langgraph tutorial", "is_active": True, "channels": ["LangChain", "Sentdex"], "display_order": 14},
         ]
     },
     {
         "main_category": "language_python",
         "subcategories": [
-            {"name": "Python - Most Watched", "strategy": "POPULARITY", "search_query": "python programming explained tutorial", "is_active": True, "channels": []},
-            {"name": "Python - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "python", "is_active": True, "channels": ["Corey Schafer", "freeCodeCamp.org", "Programming with Mosh", "Tech With Tim"]},
-            {"name": "Python - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "python tutorial", "is_active": True, "channels": []},
-            {"name": "Python - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "python full course tutorial OR python masterclass series OR python complete course", "is_active": True, "channels": []},
-            {"name": "Python - Interview Questions", "strategy": "POPULARITY", "search_query": "python interview questions and answers", "is_active": True, "channels": []},
+            {"name": "Python - Most Watched", "strategy": "POPULARITY", "search_query": "python programming explained tutorial", "is_active": True, "channels": [], "display_order": 1},
+            {"name": "Python - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "python", "is_active": True, "channels": ["Corey Schafer", "freeCodeCamp.org", "Programming with Mosh", "Tech With Tim"], "display_order": 2},
+            {"name": "Python - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "python tutorial", "is_active": True, "channels": [], "display_order": 3},
+            {"name": "Python - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "python full course tutorial OR python masterclass series OR python complete course", "is_active": True, "channels": [], "display_order": 4},
+            {"name": "Python - Interview Questions", "strategy": "POPULARITY", "search_query": "python interview questions and answers", "is_active": True, "channels": [], "display_order": 5},
         ]
     },
     {
         "main_category": "language_javascript",
         "subcategories": [
-            {"name": "JavaScript - Most Watched", "strategy": "POPULARITY", "search_query": "javascript programming explained tutorial", "is_active": True, "channels": []},
-            {"name": "JavaScript - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "javascript OR typescript", "is_active": True, "channels": ["Fireship", "The Net Ninja", "Traversy Media", "Jack Herrington"]},
-            {"name": "JavaScript - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "javascript concepts OR typescript concepts", "is_active": True, "channels": []},
-            {"name": "JavaScript - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "javascript full course tutorial OR javascript masterclass series OR typescript complete course", "is_active": True, "channels": []},
-            {"name": "JavaScript - Interview Questions", "strategy": "POPULARITY", "search_query": "javascript interview questions and answers", "is_active": True, "channels": []},
+            {"name": "JavaScript - Most Watched", "strategy": "POPULARITY", "search_query": "javascript programming explained tutorial", "is_active": True, "channels": [], "display_order": 1},
+            {"name": "JavaScript - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "javascript OR typescript", "is_active": True, "channels": ["Fireship", "The Net Ninja", "Traversy Media", "Jack Herrington"], "display_order": 2},
+            {"name": "JavaScript - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "javascript concepts OR typescript concepts", "is_active": True, "channels": [], "display_order": 3},
+            {"name": "JavaScript - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "javascript full course tutorial OR javascript masterclass series OR typescript complete course", "is_active": True, "channels": [], "display_order": 4},
+            {"name": "JavaScript - Interview Questions", "strategy": "POPULARITY", "search_query": "javascript interview questions and answers", "is_active": True, "channels": [], "display_order": 5},
         ]
     },
     {
         "main_category": "language_java",
         "subcategories": [
-            {"name": "Java - Most Watched", "strategy": "POPULARITY", "search_query": "java programming explained tutorial", "is_active": True, "channels": []},
-            {"name": "Java - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "java", "is_active": True, "channels": ["Amigoscode", "Bro Code", "Telusko", "freeCodeCamp.org"]},
-            {"name": "Java - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "java concepts", "is_active": True, "channels": []},
-            {"name": "Java - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "java full course tutorial OR java masterclass series OR java complete course", "is_active": True, "channels": []},
-            {"name": "Java - Interview Questions", "strategy": "POPULARITY", "search_query": "java interview questions and answers", "is_active": True, "channels": []},
+            {"name": "Java - Most Watched", "strategy": "POPULARITY", "search_query": "java programming explained tutorial", "is_active": True, "channels": [], "display_order": 1},
+            {"name": "Java - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "java", "is_active": True, "channels": ["Amigoscode", "Bro Code", "Telusko", "freeCodeCamp.org"], "display_order": 2},
+            {"name": "Java - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "java concepts", "is_active": True, "channels": [], "display_order": 3},
+            {"name": "Java - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "java full course tutorial OR java masterclass series OR java complete course", "is_active": True, "channels": [], "display_order": 4},
+            {"name": "Java - Interview Questions", "strategy": "POPULARITY", "search_query": "java interview questions and answers", "is_active": True, "channels": [], "display_order": 5},
         ]
     },
     {
         "main_category": "language_cpp",
         "subcategories": [
-            {"name": "C++ - Most Watched", "strategy": "POPULARITY", "search_query": "c++ programming explained tutorial", "is_active": True, "channels": []},
-            {"name": "C++ - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "c++", "is_active": True, "channels": ["The Cherno", "CodeBeauty", "Jason Turner", "freeCodeCamp.org"]},
-            {"name": "C++ - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "c++ concepts", "is_active": True, "channels": []},
-            {"name": "C++ - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "c++ full course tutorial OR c++ masterclass series OR c++ complete course", "is_active": True, "channels": []},
-            {"name": "C++ - Interview Questions", "strategy": "POPULARITY", "search_query": "c++ interview questions and answers", "is_active": True, "channels": []},
+            {"name": "C++ - Most Watched", "strategy": "POPULARITY", "search_query": "c++ programming explained tutorial", "is_active": True, "channels": [], "display_order": 1},
+            {"name": "C++ - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "c++", "is_active": True, "channels": ["The Cherno", "CodeBeauty", "Jason Turner", "freeCodeCamp.org"], "display_order": 2},
+            {"name": "C++ - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "c++ concepts", "is_active": True, "channels": [], "display_order": 3},
+            {"name": "C++ - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "c++ full course tutorial OR c++ masterclass series OR c++ complete course", "is_active": True, "channels": [], "display_order": 4},
+            {"name": "C++ - Interview Questions", "strategy": "POPULARITY", "search_query": "c++ interview questions and answers", "is_active": True, "channels": [], "display_order": 5},
         ]
     },
     {
         "main_category": "language_csharp",
         "subcategories": [
-            {"name": "C# - Most Watched", "strategy": "POPULARITY", "search_query": "c# programming explained tutorial", "is_active": True, "channels": []},
-            {"name": "C# - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "c#", "is_active": True, "channels": ["IAmTimCorey", "Nick Chapsas", "Programming with Mosh", "freeCodeCamp.org"]},
-            {"name": "C# - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "c# concepts", "is_active": True, "channels": []},
-            {"name": "C# - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "c# full course tutorial OR c# masterclass series OR c# complete course", "is_active": True, "channels": []},
-            {"name": "C# - Interview Questions", "strategy": "POPULARITY", "search_query": "c# interview questions and answers", "is_active": True, "channels": []},
+            {"name": "C# - Most Watched", "strategy": "POPULARITY", "search_query": "c# programming explained tutorial", "is_active": True, "channels": [], "display_order": 1},
+            {"name": "C# - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "c#", "is_active": True, "channels": ["IAmTimCorey", "Nick Chapsas", "Programming with Mosh", "freeCodeCamp.org"], "display_order": 2},
+            {"name": "C# - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "c# concepts", "is_active": True, "channels": [], "display_order": 3},
+            {"name": "C# - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "c# full course tutorial OR c# masterclass series OR c# complete course", "is_active": True, "channels": [], "display_order": 4},
+            {"name": "C# - Interview Questions", "strategy": "POPULARITY", "search_query": "c# interview questions and answers", "is_active": True, "channels": [], "display_order": 5},
         ]
     },
     {
         "main_category": "language_go",
         "subcategories": [
-            {"name": "Go - Most Watched", "strategy": "POPULARITY", "search_query": "golang programming explained tutorial", "is_active": True, "channels": []},
-            {"name": "Go - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "golang", "is_active": True, "channels": ["Nic Jackson", "JustForFunc", "Anthony GG", "Learn To Code"]},
-            {"name": "Go - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "golang concepts", "is_active": True, "channels": []},
-            {"name": "Go - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "golang full course tutorial OR golang masterclass series OR golang complete course", "is_active": True, "channels": []},
-            {"name": "Go - Interview Questions", "strategy": "POPULARITY", "search_query": "golang interview questions and answers", "is_active": True, "channels": []},
+            {"name": "Go - Most Watched", "strategy": "POPULARITY", "search_query": "golang programming explained tutorial", "is_active": True, "channels": [], "display_order": 1},
+            {"name": "Go - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "golang", "is_active": True, "channels": ["Nic Jackson", "JustForFunc", "Anthony GG", "Learn To Code"], "display_order": 2},
+            {"name": "Go - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "golang concepts", "is_active": True, "channels": [], "display_order": 3},
+            {"name": "Go - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "golang full course tutorial OR golang masterclass series OR golang complete course", "is_active": True, "channels": [], "display_order": 4},
+            {"name": "Go - Interview Questions", "strategy": "POPULARITY", "search_query": "golang interview questions and answers", "is_active": True, "channels": [], "display_order": 5},
         ]
     },
     {
         "main_category": "language_rust",
         "subcategories": [
-            {"name": "Rust - Most Watched", "strategy": "POPULARITY", "search_query": "rust programming explained tutorial", "is_active": True, "channels": []},
-            {"name": "Rust - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "rust", "is_active": True, "channels": ["Let's Get Rusty", "No Boilerplate", "Ryan Levick", "freeCodeCamp.org"]},
-            {"name": "Rust - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "rust concepts", "is_active": True, "channels": []},
-            {"name": "Rust - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "rust full course tutorial OR rust masterclass series OR rust complete course", "is_active": True, "channels": []},
-            {"name": "Rust - Interview Questions", "strategy": "POPULARITY", "search_query": "rust interview questions and answers", "is_active": True, "channels": []},
+            {"name": "Rust - Most Watched", "strategy": "POPULARITY", "search_query": "rust programming explained tutorial", "is_active": True, "channels": [], "display_order": 1},
+            {"name": "Rust - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "rust", "is_active": True, "channels": ["Let's Get Rusty", "No Boilerplate", "Ryan Levick", "freeCodeCamp.org"], "display_order": 2},
+            {"name": "Rust - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "rust concepts", "is_active": True, "channels": [], "display_order": 3},
+            {"name": "Rust - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "rust full course tutorial OR rust masterclass series OR rust complete course", "is_active": True, "channels": [], "display_order": 4},
+            {"name": "Rust - Interview Questions", "strategy": "POPULARITY", "search_query": "rust interview questions and answers", "is_active": True, "channels": [], "display_order": 5},
         ]
     },
     {
         "main_category": "language_sql",
         "subcategories": [
-            {"name": "SQL - Most Watched", "strategy": "POPULARITY", "search_query": "sql programming explained tutorial", "is_active": True, "channels": []},
-            {"name": "SQL - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "sql", "is_active": True, "channels": ["Alex The Analyst", "kudvenkat", "Programming with Mosh", "freeCodeCamp.org"]},
-            {"name": "SQL - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "sql concepts", "is_active": True, "channels": []},
-            {"name": "SQL - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "sql full course tutorial OR sql masterclass series OR sql complete course", "is_active": True, "channels": []},
-            {"name": "SQL - Interview Questions", "strategy": "POPULARITY", "search_query": "sql interview questions and answers", "is_active": True, "channels": []},
+            {"name": "SQL - Most Watched", "strategy": "POPULARITY", "search_query": "sql programming explained tutorial", "is_active": True, "channels": [], "display_order": 1},
+            {"name": "SQL - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "sql", "is_active": True, "channels": ["Alex The Analyst", "kudvenkat", "Programming with Mosh", "freeCodeCamp.org"], "display_order": 2},
+            {"name": "SQL - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "sql concepts", "is_active": True, "channels": [], "display_order": 3},
+            {"name": "SQL - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "sql full course tutorial OR sql masterclass series OR sql complete course", "is_active": True, "channels": [], "display_order": 4},
+            {"name": "SQL - Interview Questions", "strategy": "POPULARITY", "search_query": "sql interview questions and answers", "is_active": True, "channels": [], "display_order": 5},
         ]
     },
     {
         "main_category": "language_kotlin",
         "subcategories": [
-            {"name": "Kotlin - Most Watched", "strategy": "POPULARITY", "search_query": "kotlin programming explained tutorial", "is_active": True, "channels": []},
-            {"name": "Kotlin - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "kotlin", "is_active": True, "channels": ["Philipp Lackner", "CodingWithMitch", "freeCodeCamp.org", "JetBrains TV"]},
-            {"name": "Kotlin - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "kotlin concepts", "is_active": True, "channels": []},
-            {"name": "Kotlin - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "kotlin full course tutorial OR kotlin masterclass series OR kotlin complete course", "is_active": True, "channels": []},
-            {"name": "Kotlin - Interview Questions", "strategy": "POPULARITY", "search_query": "kotlin interview questions and answers", "is_active": True, "channels": []},
+            {"name": "Kotlin - Most Watched", "strategy": "POPULARITY", "search_query": "kotlin programming explained tutorial", "is_active": True, "channels": [], "display_order": 1},
+            {"name": "Kotlin - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "kotlin", "is_active": True, "channels": ["Philipp Lackner", "CodingWithMitch", "freeCodeCamp.org", "JetBrains TV"], "display_order": 2},
+            {"name": "Kotlin - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "kotlin concepts", "is_active": True, "channels": [], "display_order": 3},
+            {"name": "Kotlin - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "kotlin full course tutorial OR kotlin masterclass series OR kotlin complete course", "is_active": True, "channels": [], "display_order": 4},
+            {"name": "Kotlin - Interview Questions", "strategy": "POPULARITY", "search_query": "kotlin interview questions and answers", "is_active": True, "channels": [], "display_order": 5},
         ]
     },
     {
         "main_category": "language_swift",
         "subcategories": [
-            {"name": "Swift - Most Watched", "strategy": "POPULARITY", "search_query": "swift programming explained tutorial", "is_active": True, "channels": []},
-            {"name": "Swift - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "swift", "is_active": True, "channels": ["CodeWithChris", "Sean Allen", "LetsBuildThatApp", "Paul Hudson"]},
-            {"name": "Swift - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "swift concepts", "is_active": True, "channels": []},
-            {"name": "Swift - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "swift full course tutorial OR swift masterclass series OR swift complete course", "is_active": True, "channels": []},
-            {"name": "Swift - Interview Questions", "strategy": "POPULARITY", "search_query": "swift interview questions and answers", "is_active": True, "channels": []},
+            {"name": "Swift - Most Watched", "strategy": "POPULARITY", "search_query": "swift programming explained tutorial", "is_active": True, "channels": [], "display_order": 1},
+            {"name": "Swift - Latest Uploads", "strategy": "RECENCY_CURATED", "search_query": "swift", "is_active": True, "channels": ["CodeWithChris", "Sean Allen", "LetsBuildThatApp", "Paul Hudson"], "display_order": 2},
+            {"name": "Swift - Quick Concepts", "strategy": "FORMAT_DURATION", "search_query": "swift concepts", "is_active": True, "channels": [], "display_order": 3},
+            {"name": "Swift - Masterclasses", "strategy": "FORMAT_KEYWORD", "search_query": "swift full course tutorial OR swift masterclass series OR swift complete course", "is_active": True, "channels": [], "display_order": 4},
+            {"name": "Swift - Interview Questions", "strategy": "POPULARITY", "search_query": "swift interview questions and answers", "is_active": True, "channels": [], "display_order": 5},
         ]
     },
 ]
