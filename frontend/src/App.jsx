@@ -12,8 +12,8 @@ const colors = {
   'light-gray': '#E0E0E0'
 };
 
-// API base URL
-const API_BASE_URL = 'http://127.0.0.1:8001';
+// API base URL - uses environment variable in production, localhost in development
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8001';
 
 // Custom TextIcon component for languages without specific icons
 const TextIcon = ({ name }) => (
