@@ -147,7 +147,7 @@ async def get_videos(category: Optional[str], subcategory: Optional[str]) -> Lis
         response = supabase.table('videos')\
             .select('*')\
             .eq('category', category)\
-            .eq('subcategory', subcategory)\
+            .eq('sub_category', subcategory)\
             .order('published_at', desc=True)\
             .limit(50)\
             .execute()
