@@ -202,7 +202,7 @@ def get_video_details(video_ids: List[str]) -> List[Dict[str, Any]]:
             batch = video_ids[i:i+50]
             
             response = youtube.videos().list(
-                part='snippet,statistics,contentDetails',
+                part='snippet',  # Only need snippet, not statistics or contentDetails
                 id=','.join(batch)
             ).execute()
             
@@ -251,35 +251,31 @@ def parse_duration_to_seconds(duration: str) -> int:
     return hours * 3600 + minutes * 60 + seconds
 
 
-def format_video_for_database(video: Dict[str, Any], subcategory_id: int) -> Dict[str, Any]:
+def format_video_for_database(video: Dict[str, Any], subcategory_id: int, category: str, subcategory: str) -> Dict[str, Any]:
     """
     Format a YouTube video object into a dictionary matching our videos table schema.
     
     Args:
         video: YouTube video resource from videos.list()
         subcategory_id: The subcategory this video belongs to
+        category: Main category (e.g., 'dsa', 'system_design')
+        subcategory: Subcategory name (e.g., 'Most Watched')
         
     Returns:
         Dictionary ready for database insertion
     """
     snippet = video.get('snippet', {})
-    statistics = video.get('statistics', {})
-    content_details = video.get('content_details', {})
     
     return {
         'video_id': video['id'],
         'subcategory_id': subcategory_id,
+        'category': category,
+        'subcategory': subcategory,
         'title': snippet.get('title', ''),
         'description': snippet.get('description', '')[:500],  # Truncate to 500 chars
         'channel_title': snippet.get('channelTitle', ''),
         'published_at': snippet.get('publishedAt'),
-        'thumbnail_url': snippet.get('thumbnails', {}).get('high', {}).get('url', ''),
-        'duration_seconds': parse_duration_to_seconds(content_details.get('duration', 'PT0S')),
-        'view_count': int(statistics.get('viewCount', 0)),
-        'like_count': int(statistics.get('likeCount', 0)),
-        # Note: comment_count removed - not in database schema
-        'tags': snippet.get('tags', [])[:10] if snippet.get('tags') else [],  # Limit to 10 tags
-        'last_updated': datetime.now().isoformat()
+        'thumbnail_url': snippet.get('thumbnails', {}).get('high', {}).get('url', '')
     }
 
 
@@ -430,7 +426,7 @@ def process_subcategory(subcategory: Dict[str, Any]) -> int:
     
     # Format videos for database
     formatted_videos = [
-        format_video_for_database(video, subcat_id) 
+        format_video_for_database(video, subcat_id, category, subcat_name) 
         for video in video_details
     ]
     
