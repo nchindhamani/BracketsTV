@@ -269,7 +269,7 @@ def format_video_for_database(video: Dict[str, Any], subcategory_id: int, catego
     return {
         'video_id': video['id'],
         'category': category,  # NOT NULL - required!
-        # Note: subcategory column does NOT exist in schema (only category does)
+        'sub_category': subcategory,  # NOT NULL - required! (note: underscore in column name)
         'title': snippet.get('title', 'Untitled'),
         'description': snippet.get('description', '')[:500],  # Truncate to 500 chars
         'channel_title': snippet.get('channelTitle', 'Unknown Channel'),  # NOT NULL - required!
