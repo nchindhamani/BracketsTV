@@ -102,13 +102,13 @@ def get_channel_handles_for_subcategory(subcategory_id: int) -> List[str]:
     try:
         # Join subcategory_channels and channels tables, filter for active channels only
         response = supabase.table('subcategory_channels') \
-            .select('channels!inner(handle, is_active)') \
+            .select('channels!inner(channel_handle, is_active)') \
             .eq('subcategory_id', subcategory_id) \
             .eq('channels.is_active', True) \
             .execute()
         
         # Extract channel handles from nested structure
-        handles = [item['channels']['handle'] for item in response.data if item.get('channels')]
+        handles = [item['channels']['channel_handle'] for item in response.data if item.get('channels')]
         
         if handles:
             print(f"   → Using {len(handles)} active curated channels: {', '.join(handles[:3])}{'...' if len(handles) > 3 else ''}")
@@ -269,7 +269,6 @@ def format_video_for_database(video: Dict[str, Any], subcategory_id: int) -> Dic
         'title': snippet.get('title', ''),
         'description': snippet.get('description', '')[:500],  # Truncate to 500 chars
         'channel_title': snippet.get('channelTitle', ''),
-        'channel_id': snippet.get('channelId', ''),
         'published_at': snippet.get('publishedAt'),
         'thumbnail_url': snippet.get('thumbnails', {}).get('high', {}).get('url', ''),
         'duration_seconds': parse_duration_to_seconds(content_details.get('duration', 'PT0S')),
@@ -325,7 +324,7 @@ def process_subcategory(subcategory: Dict[str, Any]) -> int:
     """
     subcat_id = subcategory['id']
     subcat_name = subcategory['name']
-    category = subcategory['category']
+    category = subcategory['main_category']
     strategy = subcategory['strategy']
     search_query = subcategory.get('search_query', '')
     order_param = subcategory.get('order_param', 'relevance')
@@ -381,6 +380,32 @@ def process_subcategory(subcategory: Dict[str, Any]) -> int:
             query=search_query,
             order='relevance',
             video_duration=video_duration,  # 'short', 'medium', 'long'
+            max_results=max_results
+        )
+        
+    elif strategy == 'RECENCY_CURATED':
+        # Fetch latest uploads from curated channels
+        channel_handles = get_channel_handles_for_subcategory(subcat_id)
+        
+        if not channel_handles:
+            print("   ⚠ No curated channels found for this subcategory, skipping...")
+            return 0
+        
+        # Build query with channel handles, ordered by date
+        channel_part = ' OR '.join(channel_handles)
+        combined_query = f"{search_query} AND ({channel_part})" if search_query else f"({channel_part})"
+        
+        video_ids = search_youtube_videos(
+            query=combined_query,
+            order='date',
+            max_results=max_results
+        )
+        
+    elif strategy == 'FORMAT_KEYWORD':
+        # Search for videos matching specific keywords (like "masterclass", "complete guide", etc.)
+        video_ids = search_youtube_videos(
+            query=search_query,
+            order='relevance',
             max_results=max_results
         )
         
