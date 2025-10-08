@@ -277,9 +277,9 @@ def format_video_for_database(video: Dict[str, Any], subcategory_id: int) -> Dic
         'duration_seconds': parse_duration_to_seconds(content_details.get('duration', 'PT0S')),
         'view_count': int(statistics.get('viewCount', 0)),
         'like_count': int(statistics.get('likeCount', 0)),
-        'comment_count': int(statistics.get('commentCount', 0)),
+        # Note: comment_count removed - not in database schema
         'tags': snippet.get('tags', [])[:10] if snippet.get('tags') else [],  # Limit to 10 tags
-        'last_updated': datetime.utcnow().isoformat()
+        'last_updated': datetime.now().isoformat()
     }
 
 
