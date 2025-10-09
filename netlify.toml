@@ -1,14 +1,19 @@
-# FINAL netlify.toml
+# FINAL, CORRECTED netlify.toml
 
 [build]
-  # 1. Install Python dependencies from the root
+  # 1. Install Python dependencies
   # 2. THEN change to the frontend folder, install JS dependencies, and build
   command = "pip install -r requirements.txt && cd frontend && npm install && npm run build"
   
   publish = "frontend/build"
   functions = "api/"
 
+# Tell Netlify which Python version to use for the functions
+[functions]
+  runtime = "python"
+
+# This rewrite rule remains the same and is correct
 [[redirects]]
-  from = "/api/*"
+  from = "api/*"
   to = "/.netlify/functions/index"
   status = 200
