@@ -1,16 +1,13 @@
-# CORRECTED netlify.toml
+# FINAL netlify.toml
 
 [build]
-  # Tell Netlify to change to the frontend folder AND run the build command
-  command = "cd frontend && npm install && npm run build"
+  # 1. Install Python dependencies from the root
+  # 2. THEN change to the frontend folder, install JS dependencies, and build
+  command = "pip install -r requirements.txt && cd frontend && npm install && npm run build"
   
-  # The publish directory is now relative to the root
   publish = "frontend/build"
-  
-  # The functions directory is also relative to the root
   functions = "api/"
 
-# This rewrite rule remains the same and is correct
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/index"
