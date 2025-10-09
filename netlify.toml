@@ -1,14 +1,12 @@
-# FINAL, SIMPLIFIED netlify.toml
-
 [build]
-  # 1. Install Python dependencies from the root
-  # 2. THEN change to the frontend folder, install JS dependencies, and build
-  command = "pip install -r requirements.txt && cd frontend && npm install && npm run build"
-  
-  publish = "frontend/build"
-  functions = "api/"
+  base = "frontend"
+  command = "npm run build"
+  publish = "build"
 
 [[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/index"
+  from = "/*"
+  to = "/index.html"
   status = 200
+
+[build.environment]
+  NODE_VERSION = "18"
