@@ -1,12 +1,17 @@
+# CORRECTED netlify.toml
+
 [build]
-  base = "frontend"
-  command = "npm run build"
-  publish = "build"
+  # Tell Netlify to change to the frontend folder AND run the build command
+  command = "cd frontend && npm run build"
+  
+  # The publish directory is now relative to the root
+  publish = "frontend/build"
+  
+  # The functions directory is also relative to the root
+  functions = "api/"
 
+# This rewrite rule remains the same and is correct
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/api/*"
+  to = "/.netlify/functions/index"
   status = 200
-
-[build.environment]
-  NODE_VERSION = "18"
