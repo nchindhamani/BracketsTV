@@ -2,7 +2,7 @@
 
 [build]
   # Tell Netlify to change to the frontend folder AND run the build command
-  command = "cd frontend && npm run build"
+  command = "cd frontend && npm install && npm run build"
   
   # The publish directory is now relative to the root
   publish = "frontend/build"
