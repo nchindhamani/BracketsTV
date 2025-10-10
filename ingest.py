@@ -508,12 +508,19 @@ def main():
         
         print(f"\n📊 Processing {len(subcategories_to_process)}/{total_subcategories} subcategories{limit_message}")
         
+        # Track consecutive errors to detect systemic issues
+        consecutive_errors = 0
+        MAX_CONSECUTIVE_ERRORS = 3  # Abort after 3 consecutive failures
+        
         for idx, subcategory in enumerate(subcategories_to_process, 1):
             print(f"\n[{idx}/{len(subcategories_to_process)}]", end=' ')
             
             try:
                 videos_saved = process_subcategory(subcategory)
                 total_videos_saved += videos_saved
+                
+                # Reset error counter on successful processing
+                consecutive_errors = 0
                 
                 # Rate limiting: sleep between subcategories to avoid API throttling
                 if idx < len(subcategories_to_process):
@@ -531,8 +538,24 @@ def main():
                 sys.exit(0)  # Exit gracefully
                 
             except Exception as e:
+                consecutive_errors += 1
                 print(f"\n   ✗ ERROR processing subcategory: {e}")
-                # Continue with next subcategory on non-quota errors
+                
+                # Abort if too many consecutive errors (likely systemic issue)
+                if consecutive_errors >= MAX_CONSECUTIVE_ERRORS:
+                    print(f"\n\n{'='*80}")
+                    print(f"⚠️  SYSTEMIC ERROR DETECTED - Ingestion Aborted")
+                    print(f"   • {consecutive_errors} consecutive failures detected")
+                    print(f"   • Likely cause: Database schema issue, network problem, or code bug")
+                    print(f"   • Processed: {idx} of {len(subcategories_to_process)} subcategories")
+                    print(f"   • Videos saved so far: {total_videos_saved}")
+                    print(f"   • Last error: {e}")
+                    print(f"\n   💡 Fix the issue and run the script again to save YouTube API quota.")
+                    print(f"{'='*80}")
+                    sys.exit(1)  # Exit with error code
+                
+                # Continue with next subcategory (might be transient error)
+                print(f"   ⚠ Attempt {consecutive_errors}/{MAX_CONSECUTIVE_ERRORS} - continuing...")
                 continue
         
         # Summary
