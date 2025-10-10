@@ -138,12 +138,13 @@ function App() {
       setIsLoadingSubcategories(true);
       setError(null);
       
-      //chindhamani response to index.py
+      //chindhamani response_url is updated and included in the error msg for debugging
+      const response_url = `${API_BASE_URL}/?type=subcategories&category=${activeMainCategory}`;
       try {
-        const response = await fetch(`${API_BASE_URL}/index?type=subcategories&category=${activeMainCategory}`);
+        const response = await fetch(response_url);
         
         if (!response.ok) {
-          throw new Error(`${API_BASE_URL} HTTP error! status: ${response.status}`);
+          throw new Error(`${response_url} HTTP error! status: ${response.status}`);
         }
         
         const data = await response.json();
@@ -181,14 +182,14 @@ function App() {
       setIsLoadingVideos(true);
       setError(null);
       
-      //chindhamani response to index.py
+      //chindhamani response_url is updated and included in the error msg for debugging
+      const response_url = `${API_BASE_URL}/?type=videos&category=${activeMainCategory}&subcategory=${encodeURIComponent(activeSubcategory)}`;
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/index?type=videos&category=${activeMainCategory}&subcategory=${encodeURIComponent(activeSubcategory)}`
-        );
+        const response = await fetch(response_url);
+        
         
         if (!response.ok) {
-          throw new Error(`${API_BASE_URL} HTTP error! status: ${response.status}`);
+          throw new Error(`${response_url} HTTP error! status: ${response.status}`);
         }
         
         const data = await response.json();
