@@ -34,6 +34,12 @@ except ImportError:
     print("Install with: pip install google-api-python-client")
     sys.exit(1)
 
+
+# Custom exception for quota exceeded
+class QuotaExceededException(Exception):
+    """Raised when YouTube API quota is exceeded - abort ingestion immediately"""
+    pass
+
 try:
     from supabase import create_client, Client
 except ImportError:
@@ -163,11 +169,13 @@ def search_youtube_videos(query: str, order: str = 'relevance',
     except HttpError as e:
         print(f"   ✗ YouTube API Error: {e.resp.status} - {e.error_details}")
         
-        # Check for quota exceeded error
+        # Check for quota exceeded error - abort immediately to save remaining quota
         if e.resp.status == 403:
             error_reason = e.error_details[0].get('reason', '') if e.error_details else ''
             if 'quota' in error_reason.lower():
-                print("   ⚠ YouTube API quota exceeded. Waiting until tomorrow or request quota increase.")
+                print("   ⚠ YouTube API quota exceeded!")
+                print("   ⚠ Aborting ingestion to prevent further quota consumption.")
+                raise QuotaExceededException("YouTube API quota limit reached")
         
         return []
         
@@ -511,8 +519,20 @@ def main():
                 if idx < len(subcategories_to_process):
                     time.sleep(1)
                     
+            except QuotaExceededException as e:
+                # YouTube API quota exceeded - abort immediately to save quota
+                print(f"\n\n{'='*80}")
+                print(f"⚠️  QUOTA EXCEEDED - Ingestion Aborted")
+                print(f"   • Processed: {idx} of {len(subcategories_to_process)} subcategories")
+                print(f"   • Videos saved so far: {total_videos_saved}")
+                print(f"   • Quota resets at midnight Pacific Time")
+                print(f"   • OR request quota increase at: https://console.cloud.google.com/")
+                print(f"{'='*80}")
+                sys.exit(0)  # Exit gracefully
+                
             except Exception as e:
                 print(f"\n   ✗ ERROR processing subcategory: {e}")
+                # Continue with next subcategory on non-quota errors
                 continue
         
         # Summary
