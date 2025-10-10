@@ -423,7 +423,7 @@ def process_subcategory(subcategory: Dict[str, Any]) -> int:
     elif strategy == 'FORMAT_KEYWORD':
         # Search for videos matching specific keywords (like "masterclass", "complete guide", etc.)
         # For Masterclasses, use long duration to ensure comprehensive content
-        duration_filter = 'long' if 'Masterclasses' in subcategory_name else None
+        duration_filter = 'long' if 'Masterclasses' in subcat_name else None
         
         video_ids = search_youtube_videos(
             query=search_query,
