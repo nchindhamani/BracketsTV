@@ -276,7 +276,9 @@ def format_video_for_database(video: Dict[str, Any], subcategory_id: int, catego
     like_count_int = int(like_count) if like_count else None
     
     # Duration is in ISO 8601 format (PT4M13S = 4 minutes 13 seconds)
-    duration = content_details.get('duration')
+    # Convert to seconds for database storage
+    duration_iso = content_details.get('duration')
+    duration_seconds = parse_duration_to_seconds(duration_iso) if duration_iso else None
     
     # Tags as a list
     tags = snippet.get('tags', [])
@@ -292,7 +294,7 @@ def format_video_for_database(video: Dict[str, Any], subcategory_id: int, catego
         'thumbnail_url': snippet.get('thumbnails', {}).get('high', {}).get('url', ''),
         'view_count': view_count_int,
         'like_count': like_count_int,
-        'duration': duration,
+        'duration': duration_seconds,
         'tags': tags
     }
 
